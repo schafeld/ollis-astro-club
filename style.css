@@ -1,0 +1,125 @@
+/* Footer styling */
+.astro-footer {
+  text-align: center;
+  margin: 2rem auto 1.5rem auto;
+  color: #555;
+  font-size: 1em;
+}
+/*
+  Astro Club Stylesheet
+  Responsive and inspired by Tipps-Links-Astro-Podcasts.svg
+*/
+
+body {
+  margin: 0;
+  font-family: 'Arial', 'Helvetica Neue', Arial, sans-serif;
+  background: #f8f8f8;
+  color: #222;
+}
+
+.astro-main {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem;
+}
+
+.astro-header {
+  margin-bottom: 2.5rem;
+}
+.astro-header-flex {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  justify-content: center;
+}
+.astro-logo {
+  width: 64px;
+  height: 64px;
+  /* border-radius: 50%; */
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #fff;
+  object-fit: cover;
+}
+.astro-header h1 {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin: 0;
+}
+.subtitle {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  color: #444;
+  margin-top: 0.5rem;
+}
+
+.astro-section {
+  margin-bottom: 2.5rem;
+}
+.astro-section h2 {
+  font-family: 'Lucida Grande', 'Arial', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.emoji {
+  font-size: 1.3em;
+  line-height: 1;
+}
+
+.podcast-list, .app-list, .kids-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+.podcast-item, .app-item, .kids-item {
+  background: #f0f4fa;
+  border-left: 4px solid #3a6ea5;
+  padding: 1em 1.2em;
+  border-radius: 0.7em;
+  font-size: 1.05em;
+}
+.podcast-item strong, .app-item strong, .kids-item strong {
+  font-style: italic;
+  font-weight: 700;
+}
+
+a {
+  color: #1a4d8f;
+  text-decoration: underline;
+  word-break: break-all;
+}
+a:hover {
+  color: #0d2c4a;
+}
+
+@media (max-width: 600px) {
+  .astro-main {
+    padding: 1rem 0.3rem;
+  }
+  .astro-header-flex {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .astro-logo {
+    width: 48px;
+    height: 48px;
+  }
+  .astro-header h1 {
+    font-size: 1.3rem;
+  }
+  .astro-section h2 {
+    font-size: 1.1rem;
+  }
+  .podcast-item, .app-item, .kids-item {
+    font-size: 0.98em;
+    padding: 0.7em 0.7em;
+  }
+}
