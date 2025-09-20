@@ -46,6 +46,7 @@ export class AstroThemeToggle extends LitElement {
       display: inline-flex;
       align-items: center;
       gap: var(--astro-spacing-sm);
+      margin-top: var(--astro-spacing-xs);
     }
 
     .toggle-label {
