@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Olli's Astro Club - Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
+    <meta name="keywords" content="astronomy, telescope, stars, planets, club, observation, astrophotography">
+    <meta name="author" content="Olli's Astro Club">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Olli's Astro Club - Astronomy for everyone">
+    <meta property="og:description" content="Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ollis-astro-club.com/en">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Olli's Astro Club - Astronomy for everyone">
+    <meta name="twitter:description" content="Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
+    
+    <title>Olli's Astro Club - Astronomy for everyone</title>
+    <link rel="icon" href="/assets/logo-astro-club-300x300.png" type="image/png">
+    <style>
+        /* Prevent flash of unstyled content */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out; 
+        }
+        body.loaded { 
+            opacity: 1; 
+        }
+    </style>
+    <script type="module" src="/src/index.ts"></script>
+</head>
+<body>
+    <astro-layout page-title="Welcome" current-path="/en/">
+        <!-- Hero Section -->
+        <section class="hero" style="text-align: center; padding: 3rem 0; background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); color: white; margin: 0 0 2rem 0; border-radius: 0 0 1rem 1rem;">
+            <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem;">
+                <h2 style="font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem 0; line-height: 1.2;">
+                    Exploring the wonders of the universe together
+                </h2>
+                <p style="font-size: 1.2rem; margin: 0 0 2rem 0; opacity: 0.9; line-height: 1.6;">
+                    Welcome to Olli's Astro Club! Here astronomy enthusiasts of all ages come together 
+                    to explore the sky, learn, and marvel at the cosmos.
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <astro-button variant="primary" size="large" href="/en/club">
+                        Learn more about us
+                    </astro-button>
+                    <astro-button variant="secondary" size="large" href="/en/meetings">
+                        Upcoming events
+                    </astro-button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section style="margin: 3rem 0;">
+            <h2 style="font-size: 2rem; text-align: center; margin-bottom: 2rem; color: var(--astro-text-color);">
+                What we offer
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <astro-card 
+                    title="🔭 Professional Equipment" 
+                    variant="elevated"
+                    style="transition: transform 0.2s ease; cursor: pointer;"
+                    onmouseover="this.style.transform='translateY(-4px)'"
+                    onmouseout="this.style.transform='translateY(0)'"
+                >
+                    <p>
+                        High-quality telescopes, binoculars, and astrophotography equipment. 
+                        From beginner-friendly refractors to advanced Schmidt-Cassegrains.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Equipment guide
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="👥 Expert guidance" 
+                    variant="elevated"
+                    style="transition: transform 0.2s ease; cursor: pointer;"
+                    onmouseover="this.style.transform='translateY(-4px)'"
+                    onmouseout="this.style.transform='translateY(0)'"
+                >
+                    <p>
+                        Experienced amateur astronomers guide beginners through their first steps 
+                        and help with questions about equipment and observation techniques.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Meet the team
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="🌟 Dark sky location" 
+                    variant="elevated"
+                    style="transition: transform 0.2s ease; cursor: pointer;"
+                    onmouseover="this.style.transform='translateY(-4px)'"
+                    onmouseout="this.style.transform='translateY(0)'"
+                >
+                    <p>
+                        Our club site is located outside the city with minimal light pollution - 
+                        ideal conditions for stargazing and astrophotography.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Location info
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; color: var(--astro-text-color);">
+                Latest news
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <astro-card 
+                    title="🚀 Jupiter Opposition 2024" 
+                    subtitle="Perfect viewing opportunity"
+                    variant="default"
+                >
+                    <p>
+                        Jupiter reaches opposition this month, making it the brightest and largest 
+                        it will appear all year. Don't miss this spectacular viewing opportunity!
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Read more
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="📅 Autumn observation evening" 
+                    subtitle="September 25, 2025"
+                    variant="default"
+                >
+                    <p>
+                        Join us for our special autumn observation evening. We'll explore autumn 
+                        constellations and hunt for deep-sky objects.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Register now
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="🎓 Astrophotography workshop" 
+                    subtitle="October 15, 2025"
+                    variant="default"
+                >
+                    <p>
+                        Learn the basics of astrophotography from our experts. From camera settings 
+                        to image processing - everything you need to know.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Sign up
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <!-- Sky this month -->
+        <section style="margin: 4rem 0;">
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; color: var(--astro-text-color);">
+                Sky highlights this month
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <astro-card 
+                    title="🌙 New Moon" 
+                    subtitle="September 28, 2025"
+                    variant="default"
+                >
+                    <p>
+                        Perfect conditions for deep-sky observation. The darkest nights of the month 
+                        are ideal for viewing galaxies and nebulae.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Moon calendar
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="⭐ Jupiter & Saturn" 
+                    variant="default"
+                >
+                    <p>
+                        The two gas giants are currently well positioned for evening observation. 
+                        Perfect targets for telescope beginners!
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Planet guide
+                        </astro-button>
+                    </div>
+                </astro-card>
+                
+                <astro-card 
+                    title="🌌 Andromeda Galaxy" 
+                    variant="default"
+                >
+                    <p>
+                        M31, our neighboring galaxy, is high in the sky and easily visible 
+                        even with small telescopes.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Deep-sky guide
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section style="text-align: center; margin: 4rem 0; padding: 2rem; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border-radius: 1rem;">
+            <h2 style="font-size: 2rem; font-weight: bold; margin: 0 0 1rem 0;">
+                Ready for your adventure under the stars?
+            </h2>
+            <p style="font-size: 1.2rem; margin: 0 0 2rem 0; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Join our club and discover the fascinating world of astronomy. 
+                Perfect for beginners and experts alike!
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <astro-button variant="primary" size="large" href="/en/contact">
+                    Get in touch
+                </astro-button>
+                <astro-button variant="secondary" size="large" href="/en/club">
+                    Learn more
+                </astro-button>
+            </div>
+        </section>
+    </astro-layout>
+</body>
+</html>

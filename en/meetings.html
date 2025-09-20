@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Meetings | Olli's Astro Club</title>
+    <link rel="icon" href="/assets/logo-astro-club-300x300.png" type="image/png">
+    <style>
+        /* Prevent flash of unstyled content */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out; 
+        }
+        body.loaded { 
+            opacity: 1; 
+        }
+    </style>
+    <script type="module" src="/src/index.ts"></script>
+</head>
+<body>
+    <astro-layout page-title="Events & Meetings" current-path="/en/meetings">
+        <section style="margin: 2rem 0;">
+            <astro-card title="Regular Events" variant="elevated">
+                <p>
+                    <strong>Observation evenings:</strong> Every first and third Friday of the month<br>
+                    <strong>Time:</strong> 7:00 PM - 10:00 PM (Winter) | 8:00 PM - 11:00 PM (Summer)<br>
+                    <strong>Location:</strong> Club site Observatory Musterberg
+                </p>
+                <p>
+                    <strong>Workshops:</strong> Every second Saturday of the month<br>
+                    <strong>Time:</strong> 2:00 PM - 5:00 PM<br>
+                    <strong>Location:</strong> Club rooms or Observatory
+                </p>
+            </astro-card>
+        </section>
+
+        <section style="margin: 3rem 0;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color);">
+                Upcoming Events
+            </h2>
+            <div style="display: grid; gap: 1.5rem;">
+                <astro-card 
+                    title="Observation Evening: Winter Constellations"
+                    subtitle="Friday, December 15, 2024 • 7:00 PM - 10:00 PM"
+                    variant="outlined"
+                >
+                    <p>
+                        Discover the magnificent constellations of the winter sky! We'll observe Orion, 
+                        the Pleiades, Auriga and other highlights of the cold season.
+                    </p>
+                    <p><strong>What to expect:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Telescope observation of winter constellations</li>
+                        <li>Introduction to winter astronomy</li>
+                        <li>Hot tea and warm beverages</li>
+                        <li>Suitable for beginners and advanced</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Register
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card 
+                    title="Workshop: Beginner Telescopes"
+                    subtitle="Saturday, December 22, 2024 • 2:00 PM - 5:00 PM"
+                    variant="outlined"
+                >
+                    <p>
+                        Everything you need to know about buying and using your first telescope. 
+                        From selection to your first successful observation.
+                    </p>
+                    <p><strong>Topics:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Telescope types and their pros/cons</li>
+                        <li>Budget and purchase recommendations</li>
+                        <li>Setup and first observations</li>
+                        <li>Care and maintenance</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Register
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card 
+                    title="Observation Evening: Moon and Planets"
+                    subtitle="Friday, January 5, 2025 • 7:00 PM - 10:00 PM"
+                    variant="outlined"
+                >
+                    <p>
+                        The first observation evening of the new year is dedicated to our 
+                        Earth's satellite and the visible planets.
+                    </p>
+                    <p><strong>Observation targets:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Lunar craters and mountains in detail</li>
+                        <li>Jupiter with its moons</li>
+                        <li>Saturn's rings and moons</li>
+                        <li>Mars surface features</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Register
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card 
+                    title="Workshop: Astrophotography for Beginners"
+                    subtitle="Saturday, January 14, 2025 • 2:00 PM - 6:00 PM"
+                    variant="outlined"
+                >
+                    <p>
+                        Learn the basics of astrophotography - from simple smartphone shots 
+                        to dedicated camera setups.
+                    </p>
+                    <p><strong>What you'll learn:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Camera settings for astrophotography</li>
+                        <li>Equipment overview and recommendations</li>
+                        <li>Image stacking and processing</li>
+                        <li>Practical shooting session</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Register
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color);">
+                Special Events 2025
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                <astro-card title="🌓 Partial Lunar Eclipse" subtitle="March 14, 2025" variant="default">
+                    <p>
+                        A partial lunar eclipse will be visible from our location. 
+                        Join us for this special celestial event with live commentary 
+                        and telescopic views.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="☄️ Meteor Shower Peak" subtitle="August 12-13, 2025" variant="default">
+                    <p>
+                        The Perseid meteor shower reaches its peak! We'll have a special 
+                        overnight observation session with camping on-site.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="🔭 Equipment Fair" subtitle="May 18, 2025" variant="default">
+                    <p>
+                        Our annual equipment fair with vendors, used telescope sales, 
+                        and hands-on demonstrations of the latest astronomy gear.
+                    </p>
+                </astro-card>
+            </div>
+        </section>
+
+        <section style="margin: 3rem 0;">
+            <astro-card title="Want to attend an event?" variant="elevated">
+                <p>
+                    Most of our regular events are free for members and have a small fee for guests. 
+                    Special workshops may have additional costs for materials. 
+                    Registration is recommended to ensure we have enough equipment and refreshments.
+                </p>
+                <div style="margin: 1.5rem 0;">
+                    <p><strong>Event fees:</strong></p>
+                    <ul style="padding-left: 1.2rem; line-height: 1.6;">
+                        <li>Observation evenings: Free for members, €5 for guests</li>
+                        <li>Basic workshops: Free for members, €10 for guests</li>
+                        <li>Special workshops: €15 for members, €25 for guests</li>
+                        <li>Annual events: Varies (announced separately)</li>
+                    </ul>
+                </div>
+                <div slot="actions" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <astro-button variant="primary" size="medium" href="/en/contact">
+                        Contact us
+                    </astro-button>
+                    <astro-button variant="secondary" size="medium" href="/en/club">
+                        Become a member
+                    </astro-button>
+                </div>
+            </astro-card>
+        </section>
+    </astro-layout>
+</body>
+</html>

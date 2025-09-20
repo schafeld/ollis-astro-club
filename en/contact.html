@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kontakt | Olli's Astro Club</title>
-    <link rel="icon" href="/assets/logo-astro-club-300x300-8b68d9d6.png" type="image/png">
+    <title>Contact | Olli's Astro Club</title>
+    <link rel="icon" href="/assets/logo-astro-club-300x300.png" type="image/png">
     <style>
         /* Prevent flash of unstyled content */
         body { 
@@ -15,50 +15,49 @@
             opacity: 1; 
         }
     </style>
-    
-  <script type="module" crossorigin src="/assets/index-46d24ef1.js"></script>
-  <link rel="stylesheet" href="/assets/index-5de999f7.css">
+    <script type="module" src="/src/index.ts"></script>
 </head>
 <body>
-    <astro-layout page-title="Kontakt" current-path="/contact.html">
+    <astro-layout page-title="Contact" current-path="/en/contact">
         <section style="margin: 2rem 0;">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <astro-card title="📧 E-Mail" variant="elevated">
+                <astro-card title="📧 Email" variant="elevated">
                     <p style="font-size: 1.1rem; margin: 1rem 0;">
                         <strong>info@ollis-astro-club.com</strong>
                     </p>
                     <p>
-                        Schreib uns eine E-Mail für allgemeine Fragen, Anmeldungen oder 
-                        wenn du mehr über unseren Club erfahren möchtest.
+                        Send us an email for general questions, registrations or 
+                        if you want to learn more about our club.
                     </p>
                     <div slot="actions">
                         <astro-button variant="primary" size="small">
-                            E-Mail schreiben
+                            Send email
                         </astro-button>
                     </div>
                 </astro-card>
 
-                <astro-card title="📱 Telefon" variant="elevated">
+                <astro-card title="📱 Phone" variant="elevated">
                     <p style="font-size: 1.1rem; margin: 1rem 0;">
                         <strong>+49 (0) 123 456 789</strong>
                     </p>
                     <p>
-                        Ruf uns an! Am besten erreichst du uns:
-                        <br><strong>Mo-Fr 18:00 - 20:00 Uhr</strong>
-                        <br><strong>Sa 14:00 - 18:00 Uhr</strong>
+                        Call us! Best times to reach us:
+                        <br><strong>Mon-Fri 6:00 PM - 8:00 PM</strong>
+                        <br><strong>Sat 2:00 PM - 6:00 PM</strong>
                     </p>
                 </astro-card>
 
-                <astro-card title="📍 Anschrift" variant="elevated">
+                <astro-card title="📍 Address" variant="elevated">
                     <p style="font-size: 1.1rem; margin: 1rem 0;">
                         <strong>Olli's Astro Club e.V.</strong><br>
-                        Sternwarte Musterberg<br>
+                        Observatory Musterberg<br>
                         Musterstraße 123<br>
-                        12345 Musterstadt
+                        12345 Musterstadt<br>
+                        Germany
                     </p>
                     <div slot="actions">
                         <astro-button variant="secondary" size="small">
-                            Route planen
+                            Get directions
                         </astro-button>
                     </div>
                 </astro-card>
@@ -67,7 +66,7 @@
 
         <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
             <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color); text-align: center;">
-                Nachricht senden
+                Send Message
             </h2>
             <div style="max-width: 600px; margin: 0 auto;">
                 <form style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -86,7 +85,7 @@
                     
                     <div>
                         <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
-                            E-Mail *
+                            Email *
                         </label>
                         <input 
                             type="email" 
@@ -99,77 +98,93 @@
                     
                     <div>
                         <label for="subject" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
-                            Betreff
+                            Subject
                         </label>
-                        <select 
+                        <input 
+                            type="text" 
                             id="subject" 
                             name="subject"
-                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem; background-color: white;"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem;"
                         >
-                            <option value="">Bitte wählen...</option>
-                            <option value="membership">Mitgliedschaft</option>
-                            <option value="info">Allgemeine Informationen</option>
-                            <option value="events">Termine und Veranstaltungen</option>
-                            <option value="equipment">Equipment und Technik</option>
-                            <option value="other">Sonstiges</option>
-                        </select>
                     </div>
                     
                     <div>
                         <label for="message" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
-                            Nachricht *
+                            Message *
                         </label>
                         <textarea 
                             id="message" 
                             name="message" 
                             rows="6" 
                             required
-                            placeholder="Erzähl uns von deinem Interesse an der Astronomie oder stelle deine Fragen..."
-                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem; font-family: inherit; resize: vertical;"
+                            placeholder="Tell us about yourself and your interest in astronomy..."
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem; resize: vertical; font-family: inherit;"
                         ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                            <input 
+                                type="checkbox" 
+                                name="newsletter" 
+                                style="margin-top: 0.125rem;"
+                            >
+                            <span style="font-size: 0.9rem; color: var(--astro-text-light);">
+                                I would like to receive the monthly newsletter with astronomy tips and club updates.
+                            </span>
+                        </label>
                     </div>
                     
                     <div style="text-align: center; margin-top: 1rem;">
                         <astro-button variant="primary" size="large" type="submit">
-                            Nachricht senden
+                            Send message
                         </astro-button>
                     </div>
                 </form>
             </div>
         </section>
 
+        <section style="margin: 4rem 0; text-align: center;">
+            <astro-card title="Find us" variant="elevated" style="max-width: 500px; margin: 0 auto;">
+                <p>
+                    Our observatory is located about 20 km outside the city, offering excellent 
+                    dark sky conditions. We're open every Friday evening (weather permitting) 
+                    and during special astronomical events.
+                </p>
+                <div slot="actions">
+                    <astro-button variant="secondary" size="medium" href="/en/meetings">
+                        View upcoming events
+                    </astro-button>
+                </div>
+            </astro-card>
+        </section>
+
         <section style="margin: 3rem 0;">
-            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color); text-align: center;">
-                Häufige Fragen
-            </h2>
-            <div style="display: grid; gap: 1rem; max-width: 800px; margin: 0 auto;">
-                <astro-card title="Ich bin absoluter Anfänger. Kann ich trotzdem teilnehmen?" variant="default">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <astro-card title="🕐 Opening hours" variant="default">
+                    <ul style="list-style: none; padding: 0; line-height: 1.8;">
+                        <li><strong>Friday:</strong> 7:00 PM - 11:00 PM</li>
+                        <li><strong>Saturday:</strong> 7:00 PM - 12:00 AM</li>
+                        <li><strong>Special events:</strong> As announced</li>
+                        <li style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--astro-text-light);">
+                            * Weather dependent
+                        </li>
+                    </ul>
+                </astro-card>
+
+                <astro-card title="🚗 Parking" variant="default">
                     <p>
-                        Absolut! Wir freuen uns besonders über Neulinge. Bei deinem ersten Besuch 
-                        zeigen wir dir gerne die Grundlagen und stellen dir ein Teleskop zur Verfügung.
+                        Free parking is available directly at the observatory. 
+                        The site is easily accessible by car. Public transport 
+                        is limited in the evening hours.
                     </p>
                 </astro-card>
-                
-                <astro-card title="Muss ich eigenes Equipment mitbringen?" variant="default">
+
+                <astro-card title="☁️ Weather policy" variant="default">
                     <p>
-                        Nein, das ist nicht nötig. Wir haben verschiedene Teleskope und Ausrüstung, 
-                        die alle Mitglieder nutzen können. Wenn du später dein eigenes Equipment kaufen möchtest, 
-                        beraten wir dich gerne.
-                    </p>
-                </astro-card>
-                
-                <astro-card title="Wie oft treffen wir uns?" variant="default">
-                    <p>
-                        Wir haben jeden ersten und dritten Freitag im Monat einen Beobachtungsabend. 
-                        Zusätzlich gibt es Workshops, Vorträge und besondere Events bei astronomischen Highlights.
-                    </p>
-                </astro-card>
-                
-                <astro-card title="Was kostet die Mitgliedschaft?" variant="default">
-                    <p>
-                        Jugendliche bis 18 Jahre: 20€ pro Jahr<br>
-                        Erwachsene: 50€ pro Jahr<br>
-                        Eine Schnuppermitgliedschaft für 3 Monate kostet nur 10€.
+                        Events may be cancelled due to bad weather. 
+                        Check our website or call before visiting. 
+                        Indoor activities are available on cloudy nights.
                     </p>
                 </astro-card>
             </div>

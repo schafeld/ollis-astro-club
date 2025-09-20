@@ -106,9 +106,9 @@
   --astro-max-width: 1200px;
 }
 
-/* Dark theme overrides */
+/* Dark theme overrides - System preference */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --astro-text-color: #f9fafb;
     --astro-text-light: #d1d5db;
     --astro-text-muted: #9ca3af;
@@ -116,8 +116,86 @@
     --astro-background-color: #111827;
     --astro-background-alt: #1f2937;
     --astro-background-dark: #030712;
+    --astro-background-hover: #374151;
     
     --astro-border-color: #374151;
     --astro-border-dark: #6b7280;
+    
+    --astro-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --astro-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --astro-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --astro-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --astro-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
+}
+
+/* Dark theme overrides - Explicit theme selection */
+:root[data-theme="dark"],
+.dark-theme {
+  --astro-text-color: #f9fafb;
+  --astro-text-light: #d1d5db;
+  --astro-text-muted: #9ca3af;
+  
+  --astro-background-color: #111827;
+  --astro-background-alt: #1f2937;
+  --astro-background-dark: #030712;
+  --astro-background-hover: #374151;
+  
+  --astro-border-color: #374151;
+  --astro-border-dark: #6b7280;
+  
+  /* Adjusted shadows for dark theme */
+  --astro-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --astro-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --astro-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --astro-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --astro-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  
+  /* Dark theme specific primary colors (slightly adjusted for better contrast) */
+  --astro-primary-color: #3b82f6;
+  --astro-primary-light: #60a5fa;
+  --astro-primary-dark: #2563eb;
+  
+  --astro-secondary-color: #a78bfa;
+  --astro-secondary-light: #c4b5fd;
+  --astro-secondary-dark: #8b5cf6;
+  
+  --astro-accent-color: #fbbf24;
+  --astro-accent-light: #fcd34d;
+  --astro-accent-dark: #f59e0b;
+}
+
+/* Light theme explicit selection (overrides system dark preference) */
+:root[data-theme="light"] {
+  --astro-text-color: #1f2937;
+  --astro-text-light: #6b7280;
+  --astro-text-muted: #9ca3af;
+  
+  --astro-background-color: #ffffff;
+  --astro-background-alt: #f9fafb;
+  --astro-background-dark: #111827;
+  --astro-background-hover: #f3f4f6;
+  
+  --astro-border-color: #d1d5db;
+  --astro-border-dark: #374151;
+  
+  /* Light theme shadows */
+  --astro-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --astro-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --astro-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --astro-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --astro-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Original light theme primary colors */
+  --astro-primary-color: #1e3a8a;
+  --astro-primary-light: #3b82f6;
+  --astro-primary-dark: #1e40af;
+  
+  --astro-secondary-color: #7c3aed;
+  --astro-secondary-light: #a78bfa;
+  --astro-secondary-dark: #5b21b6;
+  
+  --astro-accent-color: #f59e0b;
+  --astro-accent-light: #fbbf24;
+  --astro-accent-dark: #d97706;
 }
