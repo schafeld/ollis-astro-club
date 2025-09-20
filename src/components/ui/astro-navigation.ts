@@ -10,7 +10,7 @@ import { customElement, property } from 'lit/decorators.js';
 @customElement('astro-navigation')
 export class AstroNavigation extends LitElement {
   @property({ type: Boolean, reflect: true }) open = false;
-  @property({ type: String }) currentPath = '';
+  @property({ type: String, attribute: 'current-path' }) currentPath = '';
   
   private _justToggled = false;
 
@@ -276,8 +276,10 @@ export class AstroNavigation extends LitElement {
   }
 
   private _isActive(path: string): boolean {
-    // Get current page from window location
-    const currentPage = window.location.pathname;
+    // Use currentPath property if set, otherwise fall back to window location
+    const currentPage = this.currentPath || window.location.pathname;
+    
+    console.log(`_isActive check: path=${path}, currentPath=${this.currentPath}, currentPage=${currentPage}`);
     
     if (path === '/') {
       return currentPage === '/' || currentPage === '/index.html';
