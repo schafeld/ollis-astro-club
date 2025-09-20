@@ -1,5 +1,10 @@
 /* Base styles and CSS reset for Olli's Astro Club */
 
+/* Prevent flash of unstyled content */
+:not(:defined) {
+  visibility: hidden;
+}
+
 /* Modern CSS Reset */
 *,
 *::before,

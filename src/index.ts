@@ -14,3 +14,11 @@ export { AstroNavigation } from './components/ui/astro-navigation.js';
 export { AstroLayout } from './components/layout/astro-layout.js';
 
 console.log('🌟 Olli\'s Astro Club components loaded successfully!');
+
+// Remove flash of unstyled content
+document.addEventListener('DOMContentLoaded', () => {
+  // Wait a bit for components to initialize
+  setTimeout(() => {
+    document.body.classList.add('loaded');
+  }, 100);
+});

@@ -18,6 +18,17 @@ export class AstroLayout extends LitElement {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      opacity: 0;
+      animation: fadeIn 0.3s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     .layout {

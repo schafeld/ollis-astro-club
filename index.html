@@ -20,6 +20,16 @@
     
     <title>Olli's Astro Club - Astronomie für alle</title>
     <link rel="icon" href="/assets/logo-astro-club-300x300.png" type="image/png">
+    <style>
+        /* Prevent flash of unstyled content */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out; 
+        }
+        body.loaded { 
+            opacity: 1; 
+        }
+    </style>
     <script type="module" src="/src/index.ts"></script>
 </head>
 <body>

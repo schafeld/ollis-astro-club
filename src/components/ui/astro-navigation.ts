@@ -18,6 +18,17 @@ export class AstroNavigation extends LitElement {
     :host {
       display: block;
       position: relative;
+      opacity: 0;
+      animation: fadeIn 0.2s ease-in-out forwards;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     .nav {
@@ -154,7 +165,6 @@ export class AstroNavigation extends LitElement {
 
       :host .nav__menu--open {
         display: flex !important;
-        background-color: #ffcccc !important; /* Debug: red background when open */
       }
 
       .nav__toggle {
@@ -181,7 +191,6 @@ export class AstroNavigation extends LitElement {
   `;
 
   render() {
-    console.log('Rendering with open:', this.open); // Debug log
     const menuClasses = this.open ? 'nav__menu nav__menu--open' : 'nav__menu';
 
     return html`
@@ -245,7 +254,6 @@ export class AstroNavigation extends LitElement {
     event.stopPropagation(); // Prevent event bubbling
     this._justToggled = true;
     this.open = !this.open;
-    console.log('Menu toggled:', this.open); // Debug log
     this.requestUpdate(); // Force re-render
     
     // Reset the flag after a short delay
@@ -302,7 +310,6 @@ export class AstroNavigation extends LitElement {
     const target = event.target as Element;
     // Only close if clicking outside the navigation and menu is open
     if (!this.contains(target) && this.open) {
-      console.log('Closing menu due to outside click'); // Debug log
       this.open = false;
       this.requestUpdate();
     }
