@@ -123,6 +123,7 @@ export class AstroThemeToggle extends LitElement {
     }
 
     .icon.hidden {
+      display: none;
       opacity: 0;
       transform: scale(0.5) rotate(90deg);
     }
