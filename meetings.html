@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termine & Treffen | Olli's Astro Club</title>
+    <script type="module" src="/src/index.ts"></script>
+</head>
+<body>
+    <astro-layout page-title="Termine & Treffen" current-path="/meetings">
+        <section style="margin: 2rem 0;">
+            <astro-card title="Regelmäßige Termine" variant="elevated">
+                <p>
+                    <strong>Beobachtungsabende:</strong> Jeden ersten und dritten Freitag im Monat<br>
+                    <strong>Uhrzeit:</strong> 19:00 - 22:00 Uhr (Winter) | 20:00 - 23:00 Uhr (Sommer)<br>
+                    <strong>Ort:</strong> Vereinsgelände Sternwarte Musterberg
+                </p>
+                <p>
+                    <strong>Workshops:</strong> Jeden zweiten Samstag im Monat<br>
+                    <strong>Uhrzeit:</strong> 14:00 - 17:00 Uhr<br>
+                    <strong>Ort:</strong> Vereinsräume oder Sternwarte
+                </p>
+            </astro-card>
+        </section>
+
+        <section style="margin: 3rem 0;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color);">
+                Kommende Termine
+            </h2>
+            <div style="display: grid; gap: 1.5rem;">
+                <astro-card 
+                    title="Beobachtungsabend: Wintersternbilder"
+                    subtitle="Freitag, 15. Dezember 2024 • 19:00 - 22:00 Uhr"
+                    variant="outlined"
+                >
+                    <p>
+                        Entdecke die prächtigen Sternbilder des Winterhimmels! Wir beobachten Orion, 
+                        die Plejaden, den Fuhrmann und andere Highlights der kalten Jahreszeit.
+                    </p>
+                    <p><strong>Was erwartet dich:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Teleskopbeobachtung der Wintersternbilder</li>
+                        <li>Einführung in die Winterastronomie</li>
+                        <li>Heißer Tee und warme Getränke</li>
+                        <li>Für Anfänger und Fortgeschrittene geeignet</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Anmelden
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card 
+                    title="Workshop: Einsteiger-Teleskope"
+                    subtitle="Samstag, 22. Dezember 2024 • 14:00 - 17:00 Uhr"
+                    variant="outlined"
+                >
+                    <p>
+                        Alles was du über den Kauf und die Nutzung deines ersten Teleskops wissen musst. 
+                        Von der Auswahl bis zur ersten erfolgreichen Beobachtung.
+                    </p>
+                    <p><strong>Themen:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Teleskop-Typen und ihre Vor-/Nachteile</li>
+                        <li>Budget und Kaufempfehlungen</li>
+                        <li>Aufbau und erste Beobachtungen</li>
+                        <li>Pflege und Wartung</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Anmelden
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card 
+                    title="Beobachtungsabend: Mond und Planeten"
+                    subtitle="Freitag, 5. Januar 2025 • 19:00 - 22:00 Uhr"
+                    variant="outlined"
+                >
+                    <p>
+                        Der erste Beobachtungsabend im neuen Jahr steht ganz im Zeichen unseres 
+                        Erdtrabanten und der sichtbaren Planeten.
+                    </p>
+                    <p><strong>Beobachtungsziele:</strong></p>
+                    <ul style="padding-left: 1.2rem; margin: 0.5rem 0;">
+                        <li>Mondkrater und Gebirge im Detail</li>
+                        <li>Jupiter mit seinen Monden</li>
+                        <li>Saturn und seine Ringe</li>
+                        <li>Mars (falls sichtbar)</li>
+                    </ul>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            Anmelden
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color); text-align: center;">
+                Besondere Events 2025
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <astro-card title="🌘 Mondfinsternis-Beobachtung" subtitle="März 2025" variant="default">
+                    <p>
+                        Eine teilweise Mondfinsternis wird auch von Deutschland aus sichtbar sein. 
+                        Ein unvergessliches Erlebnis für die ganze Familie!
+                    </p>
+                </astro-card>
+                
+                <astro-card title="🌠 Perseiden-Marathon" subtitle="August 2025" variant="default">
+                    <p>
+                        Die besten Sternschnuppen des Jahres! Wir verbringen die ganze Nacht 
+                        unter dem Sternenhimmel und zählen Meteore.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="🪐 Saturn-Opposition" subtitle="September 2025" variant="default">
+                    <p>
+                        Saturn steht der Erde besonders nah - die beste Zeit für 
+                        Ringbeobachtungen mit unseren Teleskopen.
+                    </p>
+                </astro-card>
+            </div>
+        </section>
+
+        <section style="text-align: center; margin: 3rem 0;">
+            <astro-card title="Anmeldung und Teilnahme" variant="elevated">
+                <p>
+                    Die Teilnahme an unseren Beobachtungsabenden ist für Mitglieder kostenlos. 
+                    Gäste sind gegen einen kleinen Unkostenbeitrag von 5€ herzlich willkommen.
+                </p>
+                <p>
+                    Für Workshops bitten wir um verbindliche Anmeldung, da die Plätze begrenzt sind.
+                </p>
+                <div slot="actions">
+                    <astro-button variant="primary" href="/contact">
+                        Anmelden / Fragen
+                    </astro-button>
+                    <astro-button variant="secondary" href="/club">
+                        Mitglied werden
+                    </astro-button>
+                </div>
+            </astro-card>
+        </section>
+    </astro-layout>
+</body>
+</html>

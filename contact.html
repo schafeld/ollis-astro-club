@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt | Olli's Astro Club</title>
+    <script type="module" src="/src/index.ts"></script>
+</head>
+<body>
+    <astro-layout page-title="Kontakt" current-path="/contact">
+        <section style="margin: 2rem 0;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <astro-card title="📧 E-Mail" variant="elevated">
+                    <p style="font-size: 1.1rem; margin: 1rem 0;">
+                        <strong>info@ollis-astro-club.com</strong>
+                    </p>
+                    <p>
+                        Schreib uns eine E-Mail für allgemeine Fragen, Anmeldungen oder 
+                        wenn du mehr über unseren Club erfahren möchtest.
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="primary" size="small">
+                            E-Mail schreiben
+                        </astro-button>
+                    </div>
+                </astro-card>
+
+                <astro-card title="📱 Telefon" variant="elevated">
+                    <p style="font-size: 1.1rem; margin: 1rem 0;">
+                        <strong>+49 (0) 123 456 789</strong>
+                    </p>
+                    <p>
+                        Ruf uns an! Am besten erreichst du uns:
+                        <br><strong>Mo-Fr 18:00 - 20:00 Uhr</strong>
+                        <br><strong>Sa 14:00 - 18:00 Uhr</strong>
+                    </p>
+                </astro-card>
+
+                <astro-card title="📍 Anschrift" variant="elevated">
+                    <p style="font-size: 1.1rem; margin: 1rem 0;">
+                        <strong>Olli's Astro Club e.V.</strong><br>
+                        Sternwarte Musterberg<br>
+                        Musterstraße 123<br>
+                        12345 Musterstadt
+                    </p>
+                    <div slot="actions">
+                        <astro-button variant="secondary" size="small">
+                            Route planen
+                        </astro-button>
+                    </div>
+                </astro-card>
+            </div>
+        </section>
+
+        <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color); text-align: center;">
+                Nachricht senden
+            </h2>
+            <div style="max-width: 600px; margin: 0 auto;">
+                <form style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div>
+                        <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
+                            Name *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            required
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem;"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
+                            E-Mail *
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem;"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="subject" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
+                            Betreff
+                        </label>
+                        <select 
+                            id="subject" 
+                            name="subject"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem; background-color: white;"
+                        >
+                            <option value="">Bitte wählen...</option>
+                            <option value="membership">Mitgliedschaft</option>
+                            <option value="info">Allgemeine Informationen</option>
+                            <option value="events">Termine und Veranstaltungen</option>
+                            <option value="equipment">Equipment und Technik</option>
+                            <option value="other">Sonstiges</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="message" style="display: block; margin-bottom: 0.5rem; font-weight: var(--astro-font-weight-medium); color: var(--astro-text-color);">
+                            Nachricht *
+                        </label>
+                        <textarea 
+                            id="message" 
+                            name="message" 
+                            rows="6" 
+                            required
+                            placeholder="Erzähl uns von deinem Interesse an der Astronomie oder stelle deine Fragen..."
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--astro-border-color); border-radius: var(--astro-border-radius-md); font-size: 1rem; font-family: inherit; resize: vertical;"
+                        ></textarea>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <astro-button variant="primary" size="large" type="submit">
+                            Nachricht senden
+                        </astro-button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section style="margin: 3rem 0;">
+            <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--astro-text-color); text-align: center;">
+                Häufige Fragen
+            </h2>
+            <div style="display: grid; gap: 1rem; max-width: 800px; margin: 0 auto;">
+                <astro-card title="Ich bin absoluter Anfänger. Kann ich trotzdem teilnehmen?" variant="default">
+                    <p>
+                        Absolut! Wir freuen uns besonders über Neulinge. Bei deinem ersten Besuch 
+                        zeigen wir dir gerne die Grundlagen und stellen dir ein Teleskop zur Verfügung.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="Muss ich eigenes Equipment mitbringen?" variant="default">
+                    <p>
+                        Nein, das ist nicht nötig. Wir haben verschiedene Teleskope und Ausrüstung, 
+                        die alle Mitglieder nutzen können. Wenn du später dein eigenes Equipment kaufen möchtest, 
+                        beraten wir dich gerne.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="Wie oft treffen wir uns?" variant="default">
+                    <p>
+                        Wir haben jeden ersten und dritten Freitag im Monat einen Beobachtungsabend. 
+                        Zusätzlich gibt es Workshops, Vorträge und besondere Events bei astronomischen Highlights.
+                    </p>
+                </astro-card>
+                
+                <astro-card title="Was kostet die Mitgliedschaft?" variant="default">
+                    <p>
+                        Jugendliche bis 18 Jahre: 20€ pro Jahr<br>
+                        Erwachsene: 50€ pro Jahr<br>
+                        Eine Schnuppermitgliedschaft für 3 Monate kostet nur 10€.
+                    </p>
+                </astro-card>
+            </div>
+        </section>
+    </astro-layout>
+</body>
+</html>

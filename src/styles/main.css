@@ -1,0 +1,101 @@
+/* Main stylesheet that imports all other styles */
+
+/* Import design tokens first */
+@import './tokens.css';
+
+/* Import base styles */
+@import './base.css';
+
+/* Additional global styles */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--astro-spacing-md);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 var(--astro-spacing-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 var(--astro-spacing-xl);
+  }
+}
+
+/* Layout utilities */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-sm {
+  gap: var(--astro-spacing-sm);
+}
+
+.gap-md {
+  gap: var(--astro-spacing-md);
+}
+
+.gap-lg {
+  gap: var(--astro-spacing-lg);
+}
+
+/* Text utilities */
+.text-center {
+  text-align: center;
+}
+
+.text-sm {
+  font-size: var(--astro-font-size-sm);
+}
+
+.text-lg {
+  font-size: var(--astro-font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--astro-font-size-xl);
+}
+
+.font-bold {
+  font-weight: var(--astro-font-weight-bold);
+}
+
+.font-semibold {
+  font-weight: var(--astro-font-weight-semibold);
+}
+
+/* Spacing utilities */
+.mt-sm { margin-top: var(--astro-spacing-sm); }
+.mt-md { margin-top: var(--astro-spacing-md); }
+.mt-lg { margin-top: var(--astro-spacing-lg); }
+.mt-xl { margin-top: var(--astro-spacing-xl); }
+
+.mb-sm { margin-bottom: var(--astro-spacing-sm); }
+.mb-md { margin-bottom: var(--astro-spacing-md); }
+.mb-lg { margin-bottom: var(--astro-spacing-lg); }
+.mb-xl { margin-bottom: var(--astro-spacing-xl); }
+
+.p-sm { padding: var(--astro-spacing-sm); }
+.p-md { padding: var(--astro-spacing-md); }
+.p-lg { padding: var(--astro-spacing-lg); }
+.p-xl { padding: var(--astro-spacing-xl); }

@@ -1,0 +1,208 @@
+/* Base styles and CSS reset for Olli's Astro Club */
+
+/* Modern CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  line-height: var(--astro-line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* Base typography */
+html {
+  font-family: var(--astro-font-family);
+  font-size: var(--astro-font-size-base);
+  color: var(--astro-text-color);
+  background-color: var(--astro-background-color);
+}
+
+/* Heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--astro-font-weight-bold);
+  line-height: var(--astro-line-height-tight);
+  margin-bottom: var(--astro-spacing-md);
+}
+
+h1 {
+  font-size: var(--astro-font-size-4xl);
+}
+
+h2 {
+  font-size: var(--astro-font-size-3xl);
+}
+
+h3 {
+  font-size: var(--astro-font-size-2xl);
+}
+
+h4 {
+  font-size: var(--astro-font-size-xl);
+}
+
+h5 {
+  font-size: var(--astro-font-size-lg);
+}
+
+h6 {
+  font-size: var(--astro-font-size-base);
+}
+
+/* Text elements */
+p {
+  margin-bottom: var(--astro-spacing-md);
+  line-height: var(--astro-line-height-relaxed);
+}
+
+a {
+  color: var(--astro-primary-color);
+  text-decoration: none;
+  transition: color var(--astro-transition-fast);
+}
+
+a:hover {
+  color: var(--astro-primary-dark);
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--astro-primary-color);
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
+/* Lists */
+ul,
+ol {
+  margin-bottom: var(--astro-spacing-md);
+  padding-left: var(--astro-spacing-lg);
+}
+
+li {
+  margin-bottom: var(--astro-spacing-xs);
+}
+
+/* Form elements */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid var(--astro-border-color);
+  border-radius: var(--astro-border-radius);
+  padding: var(--astro-spacing-sm) var(--astro-spacing-md);
+  background-color: var(--astro-background-color);
+  color: var(--astro-text-color);
+  transition: border-color var(--astro-transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--astro-primary-color);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* Utility classes */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--astro-background-color);
+  color: var(--astro-text-color);
+  padding: var(--astro-spacing-sm) var(--astro-spacing-md);
+  border-radius: var(--astro-border-radius);
+  text-decoration: none;
+  z-index: var(--astro-z-tooltip);
+  transition: top var(--astro-transition-fast);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Focus styles for better accessibility */
+*:focus {
+  outline: 2px solid var(--astro-primary-color);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
