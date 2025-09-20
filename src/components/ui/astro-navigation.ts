@@ -11,6 +11,8 @@ import { customElement, property } from 'lit/decorators.js';
 export class AstroNavigation extends LitElement {
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ type: String }) currentPath = '';
+  
+  private _justToggled = false;
 
   static styles = css`
     :host {
@@ -136,7 +138,7 @@ export class AstroNavigation extends LitElement {
 
     /* Mobile Styles */
     @media (max-width: 768px) {
-      .nav__menu {
+      :host .nav__menu {
         position: absolute;
         top: 100%;
         left: 0;
@@ -147,15 +149,12 @@ export class AstroNavigation extends LitElement {
         flex-direction: column;
         gap: 0;
         padding: var(--astro-spacing-md);
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height var(--astro-transition-normal), opacity var(--astro-transition-normal);
-        opacity: 0;
+        display: none;
       }
 
-      .nav__menu--open {
-        max-height: 500px;
-        opacity: 1;
+      :host .nav__menu--open {
+        display: flex !important;
+        background-color: #ffcccc !important; /* Debug: red background when open */
       }
 
       .nav__toggle {
@@ -182,10 +181,8 @@ export class AstroNavigation extends LitElement {
   `;
 
   render() {
-    const menuClasses = [
-      'nav__menu',
-      this.open ? 'nav__menu--open' : ''
-    ].filter(Boolean).join(' ');
+    console.log('Rendering with open:', this.open); // Debug log
+    const menuClasses = this.open ? 'nav__menu nav__menu--open' : 'nav__menu';
 
     return html`
       <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -244,8 +241,18 @@ export class AstroNavigation extends LitElement {
     `;
   }
 
-  private _toggleMenu() {
+  private _toggleMenu(event: Event) {
+    event.stopPropagation(); // Prevent event bubbling
+    this._justToggled = true;
     this.open = !this.open;
+    console.log('Menu toggled:', this.open); // Debug log
+    this.requestUpdate(); // Force re-render
+    
+    // Reset the flag after a short delay
+    setTimeout(() => {
+      this._justToggled = false;
+    }, 10);
+    
     this.dispatchEvent(new CustomEvent('astro-nav-toggle', {
       detail: { open: this.open },
       bubbles: true
@@ -287,9 +294,17 @@ export class AstroNavigation extends LitElement {
   }
 
   private _handleDocumentClick(event: Event) {
+    // Don't close if we just toggled the menu
+    if (this._justToggled) {
+      return;
+    }
+    
     const target = event.target as Element;
+    // Only close if clicking outside the navigation and menu is open
     if (!this.contains(target) && this.open) {
+      console.log('Closing menu due to outside click'); // Debug log
       this.open = false;
+      this.requestUpdate();
     }
   }
 
