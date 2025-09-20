@@ -38,6 +38,7 @@ export class AstroLayout extends LitElement {
       margin: 0 auto;
       padding: var(--astro-spacing-xl) var(--astro-spacing-md);
       width: 100%;
+      box-sizing: border-box;
     }
 
     .layout__footer {

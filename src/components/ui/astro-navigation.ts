@@ -35,6 +35,8 @@ export class AstroNavigation extends LitElement {
       justify-content: space-between;
       align-items: center;
       min-height: 64px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .nav__logo {
@@ -55,12 +57,20 @@ export class AstroNavigation extends LitElement {
       width: 32px;
       height: 32px;
       background: var(--astro-primary-color);
-      border-radius: 50%;
+      border-radius: var(--astro-border-radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-size: var(--astro-font-size-lg);
+      overflow: hidden;
+    }
+
+    .nav__logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--astro-border-radius-md);
     }
 
     /* Desktop Navigation */
@@ -137,16 +147,15 @@ export class AstroNavigation extends LitElement {
         flex-direction: column;
         gap: 0;
         padding: var(--astro-spacing-md);
-        transform: translateY(-100%);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--astro-transition-normal), opacity var(--astro-transition-normal);
         opacity: 0;
-        visibility: hidden;
-        transition: all var(--astro-transition-normal);
       }
 
       .nav__menu--open {
-        transform: translateY(0);
+        max-height: 500px;
         opacity: 1;
-        visibility: visible;
       }
 
       .nav__toggle {
@@ -181,8 +190,10 @@ export class AstroNavigation extends LitElement {
     return html`
       <nav class="nav" role="navigation" aria-label="Main navigation">
         <div class="nav__container">
-          <a href="/" class="nav__logo" @click=${this._handleLogoClick}>
-            <div class="nav__logo-icon">🌟</div>
+          <a href="/" class="nav__logo">
+            <div class="nav__logo-icon">
+              <img src="/assets/logo-astro-club-300x300.png" alt="Olli's Astro Club Logo" />
+            </div>
             <span>Olli's Astro Club</span>
           </a>
 
@@ -196,34 +207,34 @@ export class AstroNavigation extends LitElement {
             ${this.open ? '✕' : '☰'}
           </button>
 
-          <ul class=${menuClasses} id="main-menu">
+          <ul class=${menuClasses} id="main-menu" @click=${this._handleMenuClick}>
             <li class="nav__item">
-              <a href="/" class="nav__link ${this._isActive('/') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/" class="nav__link ${this._isActive('/') ? 'nav__link--active' : ''}">
                 Home
               </a>
             </li>
             <li class="nav__item">
-              <a href="/club" class="nav__link ${this._isActive('/club') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/club.html" class="nav__link ${this._isActive('/club') ? 'nav__link--active' : ''}">
                 Der Club
               </a>
             </li>
             <li class="nav__item">
-              <a href="/meetings" class="nav__link ${this._isActive('/meetings') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/meetings.html" class="nav__link ${this._isActive('/meetings') ? 'nav__link--active' : ''}">
                 Treffen
               </a>
             </li>
             <li class="nav__item">
-              <a href="/observations" class="nav__link ${this._isActive('/observations') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/observations" class="nav__link ${this._isActive('/observations') ? 'nav__link--active' : ''}">
                 Beobachtungen
               </a>
             </li>
             <li class="nav__item">
-              <a href="/tutorials" class="nav__link ${this._isActive('/tutorials') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/tutorials" class="nav__link ${this._isActive('/tutorials') ? 'nav__link--active' : ''}">
                 Tutorials
               </a>
             </li>
             <li class="nav__item">
-              <a href="/contact" class="nav__link ${this._isActive('/contact') ? 'nav__link--active' : ''}" @click=${this._handleLinkClick}>
+              <a href="/contact.html" class="nav__link ${this._isActive('/contact') ? 'nav__link--active' : ''}">
                 Kontakt
               </a>
             </li>
@@ -241,28 +252,25 @@ export class AstroNavigation extends LitElement {
     }));
   }
 
-  private _handleLinkClick(event: Event) {
-    this.open = false; // Close mobile menu when link is clicked
-    
-    const target = event.target as HTMLAnchorElement;
-    this.currentPath = target.getAttribute('href') || '';
-    
-    this.dispatchEvent(new CustomEvent('astro-nav-navigate', {
-      detail: { path: this.currentPath },
-      bubbles: true
-    }));
-  }
-
-  private _handleLogoClick() {
-    this.open = false;
-    this.currentPath = '/';
+  private _handleMenuClick(event: Event) {
+    const target = event.target as Element;
+    if (target.tagName === 'A') {
+      // Close mobile menu when a link is clicked
+      this.open = false;
+    }
   }
 
   private _isActive(path: string): boolean {
+    // Get current page from window location
+    const currentPage = window.location.pathname;
+    
     if (path === '/') {
-      return this.currentPath === '/' || this.currentPath === '';
+      return currentPage === '/' || currentPage === '/index.html';
     }
-    return this.currentPath.startsWith(path);
+    
+    // Handle both with and without .html extension
+    const pathWithHtml = path.includes('.html') ? path : `${path}.html`;
+    return currentPage === path || currentPage === pathWithHtml || currentPage.startsWith(path + '/');
   }
 
   // Close menu when clicking outside (for mobile)
