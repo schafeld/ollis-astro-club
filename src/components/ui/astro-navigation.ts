@@ -127,7 +127,8 @@ export class AstroNavigation extends LitElement {
 
     .nav__link:hover {
       background-color: var(--astro-background-hover);
-      color: var(--astro-primary-color);
+      /* color: var(--astro-primary-color); */
+      text-decoration: underline;
     }
 
     .nav__link--active {
