@@ -192,6 +192,7 @@ export class AstroNavigation extends LitElement {
         padding: var(--astro-spacing-md);
         display: none;
         z-index: 99999; /* Same as language selector */
+        overflow-x: hidden; /* Prevent horizontal overflow */
       }
 
       :host .nav__menu--open {
@@ -204,13 +205,19 @@ export class AstroNavigation extends LitElement {
 
       .nav__item {
         width: 100%;
+        box-sizing: border-box;
       }
 
       .nav__link {
         width: 100%;
+        max-width: 100%;
         text-align: center;
         padding: var(--astro-spacing-md);
         border-radius: var(--astro-border-radius-md);
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
 
