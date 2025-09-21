@@ -6,6 +6,9 @@
 /* Import base styles */
 @import './base.css';
 
+/* Import view transition styles */
+@import './view-transitions.css';
+
 /* Additional global styles */
 .container {
   width: 100%;

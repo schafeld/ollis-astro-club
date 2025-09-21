@@ -9,6 +9,9 @@ import './components/layout/astro-layout.js';
 // Import styles
 import './styles/main.css';
 
+// Import and setup view transitions
+import { setupViewTransitions } from './utils/view-transitions.js';
+
 // Export components for external use
 export { AstroButton } from './components/ui/astro-button.js';
 export { AstroCard } from './components/ui/astro-card.js';
@@ -18,6 +21,9 @@ export { AstroThemeToggle } from './components/ui/astro-theme-toggle.js';
 export { AstroLayout } from './components/layout/astro-layout.js';
 
 console.log('🌟 Olli\'s Astro Club components loaded successfully!');
+
+// Initialize view transitions
+setupViewTransitions();
 
 // Remove flash of unstyled content
 document.addEventListener('DOMContentLoaded', () => {

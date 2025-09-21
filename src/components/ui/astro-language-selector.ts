@@ -117,25 +117,7 @@ export class AstroLanguageSelector extends LitElement {
       border: 1px solid var(--astro-border-color);
       border-radius: var(--astro-border-radius);
       box-shadow: var(--astro-shadow-md);
-      z-index: 9999; /* Increase z-index significantly */
-      margin-top: 2px;
-      overflow: hidden;
-      transform: translateY(-4px);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.2s ease;
-    }
-
-    .dropdown {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: var(--astro-background-color);
-      border: 1px solid var(--astro-border-color);
-      border-radius: var(--astro-border-radius);
-      box-shadow: var(--astro-shadow-md);
-      z-index: 9999; /* Increase z-index significantly */
+      z-index: 99999; /* Much higher than navigation */
       margin-top: 2px;
       overflow: hidden;
       transform: translateY(-4px);

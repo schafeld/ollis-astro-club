@@ -1,0 +1,239 @@
+/**
+ * View Transition Animations
+ * 
+ * CSS animations for smooth page transitions using the View Transition API.
+ * Provides slide-in effects from different directions.
+ */
+
+/* Base view transition setup - animate only the page content, not navigation */
+.page-content {
+  view-transition-name: page-content;
+}
+
+::view-transition-old(page-content),
+::view-transition-new(page-content) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Default transition (no direction specified) */
+::view-transition-old(page-content) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(page-content) {
+  animation-name: fade-in;
+}
+
+/* Slide from right (forward navigation) */
+.transition-right::view-transition-old(page-content) {
+  animation-name: slide-out-left;
+}
+
+.transition-right::view-transition-new(page-content) {
+  animation-name: slide-in-right;
+}
+
+/* Slide from left (back navigation) */
+.transition-left::view-transition-old(page-content) {
+  animation-name: slide-out-right;
+}
+
+.transition-left::view-transition-new(page-content) {
+  animation-name: slide-in-left;
+}
+
+
+
+/* Keyframe animations */
+
+/* Fade animations */
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Horizontal slide animations */
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%) scale(0.95);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Vertical slide animations */
+@keyframes slide-out-up {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-down {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0.8;
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Fallback for browsers that don't support view transitions */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(page-content),
+  ::view-transition-new(page-content) {
+    animation-duration: 0.1s;
+    animation-timing-function: ease;
+  }
+  
+  ::view-transition-old(page-content) {
+    animation-name: fade-out;
+  }
+  
+  ::view-transition-new(page-content) {
+    animation-name: fade-in;
+  }
+}
+
+/* Disable transitions on mobile screens */
+@media (max-width: 767px) {
+  ::view-transition-old(page-content),
+  ::view-transition-new(page-content) {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Loading state during transition */
+.view-transition-loading {
+  cursor: wait;
+}
+
+.view-transition-loading * {
+  pointer-events: none;
+}
+
+/* Transition group for specific elements */
+.transition-element {
+  view-transition-name: element;
+}
+
+/* Smooth transitions for individual elements */
+::view-transition-old(element),
+::view-transition-new(element) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+}
+
+/* Hero section specific transitions */
+.hero {
+  view-transition-name: hero;
+}
+
+::view-transition-old(hero),
+::view-transition-new(hero) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Navigation specific transitions - keep navigation completely fixed */
+astro-navigation {
+  view-transition-name: fixed-navigation;
+}
+
+::view-transition-old(fixed-navigation),
+::view-transition-new(fixed-navigation) {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* Hero sections should also be excluded from transitions to prevent sticking */
+.hero {
+  view-transition-name: hero-section;
+}
+
+::view-transition-old(hero-section),
+::view-transition-new(hero-section) {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+}

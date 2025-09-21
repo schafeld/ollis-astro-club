@@ -41,6 +41,8 @@ export class AstroLayout extends LitElement {
       flex: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
+      z-index: 1;
     }
 
     .layout__content {
@@ -144,7 +146,7 @@ export class AstroLayout extends LitElement {
       <div class="layout">
         <astro-navigation .currentPath=${this.currentPath}></astro-navigation>
         
-        <main class="layout__main" role="main">
+        <main class="layout__main page-content" role="main">
           <div class="layout__content">
             ${this.pageTitle ? html`<h1 class="page-title">${this.pageTitle}</h1>` : ''}
             <slot></slot>

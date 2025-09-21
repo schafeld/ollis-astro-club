@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { navigateWithTransition } from '../../utils/view-transitions.js';
 
 /**
  * AstroButton Component
@@ -173,16 +174,38 @@ export class AstroButton extends LitElement {
       return;
     }
 
+    // Handle navigation with view transitions for href buttons
+    if (this.href && !this.href.startsWith('http') && !this.href.startsWith('#')) {
+      event.preventDefault();
+      console.log('Button: starting transition to', this.href);
+      this._navigateWithTransition(this.href);
+      return;
+    }
+
     this.dispatchEvent(new CustomEvent('astro-click', {
       detail: { variant: this.variant, size: this.size },
       bubbles: true
     }));
   }
 
+  private async _navigateWithTransition(href: string) {
+    try {
+      await navigateWithTransition(href, { direction: 'right' });
+    } catch (error) {
+      console.warn('Button navigation transition failed, using fallback:', error);
+      window.location.href = href;
+    }
+  }
+
   private _handleKeyDown(event: KeyboardEvent) {
     if (this.href && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
-      this._handleClick(event);
+      if (!this.href.startsWith('http') && !this.href.startsWith('#')) {
+        console.log('Button keyboard: starting transition to', this.href);
+        this._navigateWithTransition(this.href);
+      } else {
+        window.location.href = this.href;
+      }
     }
   }
 }

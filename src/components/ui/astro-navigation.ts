@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { navigateWithTransition } from '../../utils/view-transitions.js';
 import './astro-language-selector.js';
 import './astro-theme-toggle.js';
 
@@ -20,9 +21,13 @@ export class AstroNavigation extends LitElement {
   static styles = css`
     :host {
       display: block;
-      position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 9999;
       opacity: 0;
       animation: fadeIn 0.2s ease-in-out forwards;
+      transform: none !important; /* Prevent any transforms during view transitions */
+      will-change: auto; /* Prevent GPU layering issues */
     }
     
     @keyframes fadeIn {
@@ -37,10 +42,11 @@ export class AstroNavigation extends LitElement {
     .nav {
       background-color: var(--astro-background-color);
       border-bottom: 1px solid var(--astro-border-color);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: relative;
+      z-index: 9999;
       box-shadow: var(--astro-shadow-sm);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .nav__container {
@@ -185,6 +191,7 @@ export class AstroNavigation extends LitElement {
         gap: 0;
         padding: var(--astro-spacing-md);
         display: none;
+        z-index: 99999; /* Same as language selector */
       }
 
       :host .nav__menu--open {
@@ -320,6 +327,7 @@ export class AstroNavigation extends LitElement {
     }
     
     if (newPath && newPath !== currentPath) {
+      // Use regular navigation for language switching to avoid transition issues
       window.location.href = newPath;
     }
     
@@ -361,8 +369,35 @@ export class AstroNavigation extends LitElement {
   private _handleMenuClick(event: Event) {
     const target = event.target as Element;
     if (target.tagName === 'A') {
+      const link = target as HTMLAnchorElement;
+      const href = link.getAttribute('href');
+      
+      // Handle navigation with transitions
+      if (href && !href.startsWith('http') && !href.startsWith('#')) {
+        event.preventDefault();
+        event.stopPropagation(); // Prevent global handler from also handling this
+        console.log('Navigation: starting transition to', href);
+        
+        // IMMEDIATELY update our currentPath to the target href
+        // This ensures the active state updates right away
+        this.currentPath = new URL(href, window.location.origin).pathname;
+        console.log('Navigation: immediately set currentPath to', this.currentPath);
+        this.requestUpdate();
+        
+        this._navigateWithTransition(href);
+      }
+      
       // Close mobile menu when a link is clicked
       this.open = false;
+    }
+  }
+
+  private async _navigateWithTransition(href: string) {
+    try {
+      await navigateWithTransition(href, { direction: 'right' });
+    } catch (error) {
+      console.warn('Navigation transition failed, using fallback:', error);
+      window.location.href = href;
     }
   }
 
@@ -370,21 +405,28 @@ export class AstroNavigation extends LitElement {
     // Use currentPath property if set, otherwise fall back to window location
     const currentPage = this.currentPath || window.location.pathname;
     
+    console.log('Navigation: checking if', path, 'is active against currentPage:', currentPage, '(this.currentPath =', this.currentPath, ')');
+    
     if (path === '/') {
-      return currentPage === '/' || currentPage === '/index.html' || 
+      const isActive = currentPage === '/' || currentPage === '/index.html' || 
              currentPage === '/en/' || currentPage === '/en/index.html';
+      console.log('Navigation: root path check result:', isActive);
+      return isActive;
     }
     
     // Handle both with and without .html extension
     const pathWithHtml = path.includes('.html') ? path : `${path}.html`;
+    const pathWithoutHtml = path.replace('.html', '');
     
     // Check for exact matches (root German paths)
-    if (currentPage === path || currentPage === pathWithHtml) {
+    if (currentPage === path || currentPage === pathWithHtml || currentPage === pathWithoutHtml) {
+      console.log('Navigation: exact match found for', path);
       return true;
     }
     
     // Check for English paths
-    if (currentPage === `/en${path}` || currentPage === `/en${pathWithHtml}`) {
+    if (currentPage === `/en${path}` || currentPage === `/en${pathWithHtml}` || currentPage === `/en${pathWithoutHtml}`) {
+      console.log('Navigation: English path match found for', path);
       return true;
     }
     
@@ -396,8 +438,14 @@ export class AstroNavigation extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     
-    // Detect current language from URL
+    // Detect current language and path from URL
     const currentPath = window.location.pathname;
+    
+    // Set the current path if not already set
+    if (!this.currentPath) {
+      this.currentPath = currentPath;
+    }
+    
     if (currentPath.startsWith('/en/')) {
       this.currentLanguage = 'en';
     } else {
@@ -406,6 +454,21 @@ export class AstroNavigation extends LitElement {
     
     document.addEventListener('click', this._handleDocumentClick.bind(this));
     document.addEventListener('keydown', this._handleKeyDown.bind(this));
+    
+    // Listen for transition completion (just for logging/validation)
+    this.addEventListener('transition-complete', (event: any) => {
+      console.log('Navigation: received transition-complete event', event.detail);
+      // We don't need to do anything here since we already updated our state
+    });
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+    
+    if (changedProperties.has('currentPath')) {
+      console.log('Navigation: currentPath property changed from', changedProperties.get('currentPath'), 'to', this.currentPath);
+      console.log('Navigation: component will re-render with new currentPath');
+    }
   }
 
   disconnectedCallback() {
