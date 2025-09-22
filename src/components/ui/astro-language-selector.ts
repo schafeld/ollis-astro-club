@@ -290,57 +290,117 @@ export class AstroLanguageSelector extends LitElement {
     this._focusedIndex = -1;
   }
 
-  private _selectLanguage(languageCode: string) {
-    if (languageCode !== this.currentLanguage) {
-      const oldLanguage = this.currentLanguage;
-      this.currentLanguage = languageCode;
-      
-      // Save language preference to localStorage
-      this._saveLanguagePreference(languageCode);
-      
-      // Dispatch custom event for language change
-      this.dispatchEvent(new CustomEvent('language-change', {
-        detail: {
-          oldLanguage,
-          newLanguage: languageCode,
-          language: this._languages.find(lang => lang.code === languageCode)
-        },
-        bubbles: true,
-        composed: true
-      }));
-      
-      // Navigate to the new language URL
-      this._navigateToLanguage(languageCode);
-    }
-    
+  private async _selectLanguage(languageCode: string) {
+    // Close dropdown immediately for better UX
     this._closeDropdown();
+    
+    if (languageCode === this.currentLanguage) {
+      return; // Already on this language
+    }
+
+    // Dispatch event for external listeners
+    this.dispatchEvent(new CustomEvent('language-change', {
+      bubbles: true,
+      detail: { 
+        previousLanguage: this.currentLanguage,
+        newLanguage: languageCode 
+      }
+    }));
+    
+    // Update internal state
+    this.currentLanguage = languageCode;
+    
+    // Trigger re-render to update the current language display
+    this.requestUpdate();
+    await this.updateComplete;
+    
+    // Update ARIA labels after state change
+    this.updateComplete.then(() => {
+      const button = this.shadowRoot?.querySelector('.selector-button') as HTMLButtonElement;
+      if (button) {
+        const currentLang = this._languages.find(lang => lang.code === this.currentLanguage);
+        if (currentLang) {
+          button.setAttribute('aria-label', `Sprache ändern (aktuell: ${currentLang.name})`);
+        }
+      }
+      
+      // Update ARIA selected states for options
+      this.shadowRoot?.querySelectorAll('.language-option').forEach((option: Element) => {
+        const isSelected = option.getAttribute('data-lang') === this.currentLanguage;
+        option.setAttribute('aria-selected', isSelected.toString());
+      });
+    });
+    
+    // Navigate to the new language URL
+    await this._navigateToLanguage(languageCode);
   }
 
-  private _navigateToLanguage(languageCode: string) {
+  private async _navigateToLanguage(languageCode: string) {
     const currentPath = window.location.pathname;
     const currentLangCode = this._getCurrentLanguageFromPath();
     
+    console.log('🔍 Navigation Debug:', {
+      currentPath,
+      currentLangCode,
+      targetLanguage: languageCode
+    });
+    
     let newPath: string;
     
-    if (currentLangCode) {
-      // Replace existing language in path
-      newPath = currentPath.replace(`/${currentLangCode}/`, `/${languageCode}/`);
+    // ROBUST PATH BUILDING - Multiple safety checks
+    if (currentLangCode && currentPath.includes(`/${currentLangCode}/`)) {
+      // We have a current language in the path, replace it
+      if (currentPath === `/${currentLangCode}/`) {
+        // Simple case: we're on the language root page
+        newPath = `/${languageCode}/`;
+        console.log('📍 Root page replacement:', `/${currentLangCode}/` + ' → ' + newPath);
+      } else {
+        // We're on a specific page, replace the language part
+        newPath = currentPath.replace(`/${currentLangCode}/`, `/${languageCode}/`);
+        console.log('📄 Page replacement:', currentPath + ' → ' + newPath);
+      }
     } else {
-      // Add language to root path
+      // No current language detected in path OR path doesn't contain language
+      console.log('🏠 No language detected, building new path');
       if (currentPath === '/' || currentPath === '') {
         newPath = `/${languageCode}/`;
-      } else {
-        // If we're on a specific page without language prefix, 
-        // prepend the language code
+      } else if (currentPath.startsWith('/')) {
+        // Remove leading slash and add language prefix
         newPath = `/${languageCode}${currentPath}`;
+      } else {
+        // Edge case: path doesn't start with slash
+        newPath = `/${languageCode}/${currentPath}`;
       }
+      console.log('➕ Built new path:', currentPath + ' → ' + newPath);
     }
+    
+    // MULTIPLE SAFETY CHECKS - NEVER allow navigation to root "/"
+    if (!newPath || newPath === '/' || newPath === '' || !newPath.startsWith(`/${languageCode}/`)) {
+      console.log('⚠️ SAFETY: Invalid path detected, forcing language root:', newPath);
+      newPath = `/${languageCode}/`;
+    }
+    
+    // Additional safety: ensure path always starts with /{languageCode}/
+    if (!newPath.startsWith(`/${languageCode}/`)) {
+      console.log('⚠️ SAFETY: Path missing language prefix, fixing:', newPath);
+      newPath = `/${languageCode}/`;
+    }
+    
+    console.log('🎯 Final navigation path (GUARANTEED safe):', newPath);
     
     // Ensure localStorage is saved before navigation
     this._saveLanguagePreference(languageCode);
     
-    // Navigate directly to the new path
-    window.location.href = newPath;
+    // SIMPLE NAVIGATION - Skip complex view transitions for now to ensure reliability
+    try {
+      // Use simple window.location.assign for reliable navigation
+      console.log('🚀 Navigating with window.location.assign to:', newPath);
+      window.location.assign(newPath);
+    } catch (error) {
+      // Absolute last resort fallback
+      console.error('❌ Navigation failed, using href fallback:', error);
+      window.location.href = newPath;
+    }
   }
 
   private _getCurrentLanguageFromPath(): string | null {
@@ -348,14 +408,23 @@ export class AstroLanguageSelector extends LitElement {
     const pathSegments = pathname.split('/').filter(Boolean);
     const firstSegment = pathSegments[0];
     
+    console.log('🔍 Language detection:', {
+      pathname,
+      pathSegments,
+      firstSegment,
+      availableLanguages: this._languages.map(l => l.code)
+    });
+    
     if (this._languages.some(lang => lang.code === firstSegment)) {
+      console.log('✅ Language detected:', firstSegment);
       return firstSegment;
     }
     
+    console.log('❌ No language detected in path');
     return null;
   }
 
-  private _handleKeyDown(event: KeyboardEvent) {
+  private async _handleKeyDown(event: KeyboardEvent) {
     if (this.disabled) return;
 
     switch (event.key) {
@@ -365,7 +434,7 @@ export class AstroLanguageSelector extends LitElement {
         if (!this._isOpen) {
           this._toggleDropdown();
         } else if (this._focusedIndex >= 0) {
-          this._selectLanguage(this._languages[this._focusedIndex].code);
+          await this._selectLanguage(this._languages[this._focusedIndex].code);
         }
         break;
 
@@ -396,8 +465,8 @@ export class AstroLanguageSelector extends LitElement {
     }
   }
 
-  private _handleOptionClick(languageCode: string) {
-    this._selectLanguage(languageCode);
+  private async _handleOptionClick(languageCode: string) {
+    await this._selectLanguage(languageCode);
     this._focusButton();
   }
 

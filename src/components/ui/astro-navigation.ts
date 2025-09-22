@@ -308,16 +308,19 @@ export class AstroNavigation extends LitElement {
     let newPath = '';
     
     if (newLanguage === 'de') {
-      // German - use root paths
+      // German - MUST use /de/ paths (NEVER root "/")
       if (currentPath.startsWith('/en/')) {
-        // Convert from English path to German (root)
-        newPath = currentPath.replace('/en/', '/');
+        // Convert from English path to German
+        newPath = currentPath.replace('/en/', '/de/');
       } else if (currentPath.startsWith('/de/')) {
-        // Convert from German folder to root
-        newPath = currentPath.replace('/de/', '/');
-      } else {
-        // Already at root (German)
+        // Already in German
         newPath = currentPath;
+      } else if (currentPath === '/' || currentPath === '') {
+        // Convert from root to German
+        newPath = '/de/';
+      } else {
+        // Prepend /de/ to any other path
+        newPath = '/de' + currentPath;
       }
     } else {
       // English - use /en/ paths
@@ -325,15 +328,25 @@ export class AstroNavigation extends LitElement {
         // Already in English
         newPath = currentPath;
       } else if (currentPath.startsWith('/de/')) {
-        // Convert from German folder to English
+        // Convert from German to English
         newPath = currentPath.replace('/de/', '/en/');
+      } else if (currentPath === '/' || currentPath === '') {
+        // Convert from root to English
+        newPath = '/en/';
       } else {
-        // Convert from root (German) to English
+        // Prepend /en/ to any other path
         newPath = '/en' + currentPath;
       }
     }
     
+    // SAFETY CHECK: Never allow navigation to root "/"
+    if (newPath === '/' || newPath === '' || (!newPath.startsWith('/de/') && !newPath.startsWith('/en/'))) {
+      console.warn('🚨 NAVIGATION SAFETY: Invalid path detected, forcing language root:', newPath);
+      newPath = newLanguage === 'de' ? '/de/' : '/en/';
+    }
+    
     if (newPath && newPath !== currentPath) {
+      console.log('🧭 Navigation language change:', currentPath + ' → ' + newPath);
       // Use regular navigation for language switching to avoid transition issues
       window.location.href = newPath;
     }
@@ -415,7 +428,7 @@ export class AstroNavigation extends LitElement {
     console.log('Navigation: checking if', path, 'is active against currentPage:', currentPage, '(this.currentPath =', this.currentPath, ')');
     
     if (path === '/') {
-      const isActive = currentPage === '/' || currentPage === '/index.html' || 
+      const isActive = currentPage === '/de/' || currentPage === '/de/index.html' || 
              currentPage === '/en/' || currentPage === '/en/index.html';
       console.log('Navigation: root path check result:', isActive);
       return isActive;
@@ -425,20 +438,20 @@ export class AstroNavigation extends LitElement {
     const pathWithHtml = path.includes('.html') ? path : `${path}.html`;
     const pathWithoutHtml = path.replace('.html', '');
     
-    // Check for exact matches (root German paths)
-    if (currentPage === path || currentPage === pathWithHtml || currentPage === pathWithoutHtml) {
-      console.log('Navigation: exact match found for', path);
+    // Check for German paths with /de prefix
+    if (currentPage === `/de${path}` || currentPage === `/de${pathWithHtml}` || currentPage === `/de${pathWithoutHtml}`) {
+      console.log('Navigation: German path match found for', path);
       return true;
     }
     
-    // Check for English paths
+    // Check for English paths with /en prefix
     if (currentPage === `/en${path}` || currentPage === `/en${pathWithHtml}` || currentPage === `/en${pathWithoutHtml}`) {
       console.log('Navigation: English path match found for', path);
       return true;
     }
     
     // Check for path starting with the base path (for sub-pages)
-    return currentPage.startsWith(path + '/') || currentPage.startsWith(`/en${path}/`);
+    return currentPage.startsWith(`/de${path}/`) || currentPage.startsWith(`/en${path}/`);
   }
 
   // Close menu when clicking outside (for mobile)

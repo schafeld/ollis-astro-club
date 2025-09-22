@@ -99,7 +99,7 @@ describe('AstroNavigation', () => {
 
   describe('Active State Management', () => {
     it('should mark home link as active for root path', () => {
-      element.currentPath = '/';
+      element.currentPath = '/de/';
       
       // We need to access the private method for testing
       const isHomeActive = (element as any)._isActive('/');
@@ -107,7 +107,7 @@ describe('AstroNavigation', () => {
     });
 
     it('should mark club link as active for club path', () => {
-      element.currentPath = '/club.html';
+      element.currentPath = '/de/club.html';
       
       const isClubActive = (element as any)._isActive('/club');
       expect(isClubActive).toBe(true);

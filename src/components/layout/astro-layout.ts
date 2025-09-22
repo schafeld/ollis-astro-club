@@ -168,22 +168,22 @@ export class AstroLayout extends LitElement {
             <div class="footer__section">
               <h3>Navigation</h3>
               <ul class="footer__links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/club">Der Club</a></li>
-                <li><a href="/meetings">Treffen</a></li>
-                <li><a href="/observations">Beobachtungen</a></li>
-                <li><a href="/tutorials">Tutorials</a></li>
-                <li><a href="/contact">Kontakt</a></li>
+                <li><a href="${this._getUrl('/')}">Home</a></li>
+                <li><a href="${this._getUrl('/club')}">Der Club</a></li>
+                <li><a href="${this._getUrl('/meetings')}">Treffen</a></li>
+                <li><a href="${this._getUrl('/observations')}">Beobachtungen</a></li>
+                <li><a href="${this._getUrl('/tutorials')}">Tutorials</a></li>
+                <li><a href="${this._getUrl('/contact')}">Kontakt</a></li>
               </ul>
             </div>
             
             <div class="footer__section">
               <h3>Ressourcen</h3>
               <ul class="footer__links">
-                <li><a href="/tutorials/telescope-basics">Teleskop-Grundlagen</a></li>
-                <li><a href="/tutorials/photography">Astrofotografie</a></li>
-                <li><a href="/observations/calendar">Beobachtungskalender</a></li>
-                <li><a href="/club/membership">Mitgliedschaft</a></li>
+                <li><a href="${this._getUrl('/tutorials/telescope-basics')}">Teleskop-Grundlagen</a></li>
+                <li><a href="${this._getUrl('/tutorials/photography')}">Astrofotografie</a></li>
+                <li><a href="${this._getUrl('/observations/calendar')}">Beobachtungskalender</a></li>
+                <li><a href="${this._getUrl('/club/membership')}">Mitgliedschaft</a></li>
               </ul>
             </div>
           </div>
@@ -200,10 +200,36 @@ export class AstroLayout extends LitElement {
   updated(changedProperties: Map<string, any>) {
     super.updated(changedProperties);
     
-    if (changedProperties.has('pageTitle') && this.pageTitle) {
-      // Update document title
-      document.title = `${this.pageTitle} | Olli's Astro Club`;
+    if (changedProperties.has('pageTitle')) {
+      // Update page title in document if it changed
+      if (this.pageTitle) {
+        document.title = `${this.pageTitle} - Olli's Astro Club`;
+      }
     }
+  }
+
+  // Helper method to get current language from path
+  private _getCurrentLanguage(): string {
+    const pathname = window.location?.pathname || '/';
+    if (pathname.startsWith('/en/')) {
+      return 'en';
+    } else if (pathname.startsWith('/de/')) {
+      return 'de';
+    }
+    // Default to German
+    return 'de';
+  }
+
+  // Helper method to get language-aware base URL
+  private _getBaseUrl(): string {
+    const currentLang = this._getCurrentLanguage();
+    return `/${currentLang}`;
+  }
+
+  // Helper method to get language-aware URL for a path
+  private _getUrl(path: string): string {
+    const baseUrl = this._getBaseUrl();
+    return path === '/' ? `${baseUrl}/` : `${baseUrl}${path}`;
   }
 }
 
