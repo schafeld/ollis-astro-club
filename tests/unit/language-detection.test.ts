@@ -222,10 +222,6 @@ describe('Language Detection and Redirect Logic', () => {
           return false;
         }
         
-        if (window.location.search.includes('no-redirect')) {
-          return false;
-        }
-        
         if (sessionStorage.getItem('language-selection-shown')) {
           return false;
         }
@@ -250,35 +246,6 @@ describe('Language Detection and Redirect Logic', () => {
           return false;
         }
         
-        if (window.location.search.includes('no-redirect')) {
-          return false;
-        }
-        
-        if (sessionStorage.getItem('language-selection-shown')) {
-          return false;
-        }
-        
-        return true;
-      };
-
-      expect(shouldAutoRedirect()).toBe(false);
-    });
-
-    it('should not auto-redirect when no-redirect parameter is present', () => {
-      mockLocation.search = '?no-redirect=true';
-
-      const shouldAutoRedirect = () => {
-        const referrer = document.referrer;
-        const currentHost = window.location.host;
-        
-        if (referrer && referrer.includes(currentHost)) {
-          return false;
-        }
-        
-        if (window.location.search.includes('no-redirect')) {
-          return false;
-        }
-        
         if (sessionStorage.getItem('language-selection-shown')) {
           return false;
         }
@@ -297,10 +264,6 @@ describe('Language Detection and Redirect Logic', () => {
         const currentHost = window.location.host;
         
         if (referrer && referrer.includes(currentHost)) {
-          return false;
-        }
-        
-        if (window.location.search.includes('no-redirect')) {
           return false;
         }
         
