@@ -38,7 +38,7 @@ describe('AstroNavigation', () => {
       const logoImg = element.shadowRoot!.querySelector('.nav__logo-icon img');
       
       expect(logo).toBeTruthy();
-      expect(logo?.getAttribute('href')).toBe('/');
+      expect(logo?.getAttribute('href')).toBe('/de/'); // Logo now navigates to language-specific index
       expect(logoImg?.getAttribute('src')).toBe('/assets/logo-astro-club-300x300.png');
       expect(logoImg?.getAttribute('alt')).toBe('Olli\'s Astro Club Logo');
     });
@@ -83,7 +83,7 @@ describe('AstroNavigation', () => {
       const menuLinks = element.shadowRoot!.querySelectorAll('.nav__link');
       const hrefs = Array.from(menuLinks).map(link => link.getAttribute('href'));
       
-      expect(hrefs).toEqual(['/', '/club.html', '/meetings.html', '/contact.html']);
+      expect(hrefs).toEqual(['/de/', '/de/club.html', '/de/meetings.html', '/de/contact.html']); // German URLs now include /de/ prefix
     });
 
     it('should generate correct URLs for English language', async () => {

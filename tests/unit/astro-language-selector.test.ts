@@ -7,10 +7,35 @@ import '../../src/components/ui/astro-language-selector.js';
 
 describe('AstroLanguageSelector', () => {
   let element: AstroLanguageSelector;
+  let mockLocalStorage: any;
 
   beforeEach(async () => {
     // Reset DOM and component state
     document.body.innerHTML = '';
+    
+    // Mock localStorage
+    mockLocalStorage = {
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn()
+    };
+    
+    Object.defineProperty(window, 'localStorage', {
+      value: mockLocalStorage,
+      writable: true
+    });
+    
+    // Mock navigator.languages
+    Object.defineProperty(navigator, 'languages', {
+      value: ['en-US', 'en'],
+      writable: true
+    });
+    
+    Object.defineProperty(navigator, 'language', {
+      value: 'en-US',
+      writable: true
+    });
     
     // Create fresh element
     element = await fixture<AstroLanguageSelector>(html`
@@ -24,6 +49,9 @@ describe('AstroLanguageSelector', () => {
       document.removeEventListener('click', element['_handleDocumentClick']);
       document.removeEventListener('keydown', element['_handleDocumentKeydown']);
     }
+    
+    // Reset mocks
+    vi.clearAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -259,6 +287,194 @@ describe('AstroLanguageSelector', () => {
       await element.updateComplete;
       
       expect((element as any)._isOpen).toBe(false);
+    });
+  });
+
+  describe('LocalStorage Integration', () => {
+    it('should save language preference to localStorage when language changes', async () => {
+      // Mock window.location for navigation
+      const mockLocation = { 
+        href: '', 
+        pathname: '/de/'
+      };
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true
+      });
+
+      const englishOption = element.shadowRoot!.querySelector('.language-option[aria-selected="false"]') as HTMLElement;
+      
+      englishOption.click();
+      await element.updateComplete;
+      
+      expect(mockLocalStorage.setItem).toHaveBeenCalledWith('preferred-language', 'en');
+    });
+
+    it('should load language preference from localStorage on initialization', async () => {
+      mockLocalStorage.getItem.mockReturnValue('en');
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector current-language=""></astro-language-selector>
+      `);
+      
+      expect(newElement.currentLanguage).toBe('en');
+    });
+
+    it('should detect browser language when no localStorage preference exists', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+      
+      Object.defineProperty(navigator, 'languages', {
+        value: ['de-DE', 'de', 'en'],
+        writable: true
+      });
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector></astro-language-selector>
+      `);
+      
+      expect(newElement.currentLanguage).toBe('de');
+    });
+
+    it('should fallback to default language when browser language is not supported', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+      
+      Object.defineProperty(navigator, 'languages', {
+        value: ['fr-FR', 'fr', 'es'],
+        writable: true
+      });
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector default-language="de"></astro-language-selector>
+      `);
+      
+      expect(newElement.currentLanguage).toBe('de');
+    });
+
+    it('should handle localStorage errors gracefully', async () => {
+      // Create a fresh mock that throws on getItem
+      const throwingLocalStorage = {
+        getItem: vi.fn().mockImplementation(() => {
+          throw new Error('LocalStorage not available');
+        }),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn()
+      };
+      
+      Object.defineProperty(window, 'localStorage', {
+        value: throwingLocalStorage,
+        writable: true
+      });
+      
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector default-language="en" current-language=""></astro-language-selector>
+      `);
+      
+      expect(consoleSpy).toHaveBeenCalledWith('LocalStorage not available:', expect.any(Error));
+      expect(newElement.currentLanguage).toBe('en'); // Should fallback to browser/default
+      
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Navigation Integration', () => {
+    it('should navigate to correct language URL when language changes', async () => {
+      const mockLocation = { 
+        href: '', 
+        pathname: '/de/club'
+      };
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true
+      });
+
+      const englishOption = element.shadowRoot!.querySelector('.language-option[aria-selected="false"]') as HTMLElement;
+      
+      englishOption.click();
+      await element.updateComplete;
+      
+      expect(mockLocation.href).toBe('/en/club');
+    });
+
+    it('should handle root path navigation correctly', async () => {
+      const mockLocation = { 
+        href: '', 
+        pathname: '/'
+      };
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true
+      });
+
+      const englishOption = element.shadowRoot!.querySelector('.language-option[aria-selected="false"]') as HTMLElement;
+      
+      englishOption.click();
+      await element.updateComplete;
+      
+      expect(mockLocation.href).toBe('/en/');
+    });
+
+    it('should use view transitions when available', async () => {
+      const mockStartViewTransition = vi.fn();
+      Object.defineProperty(document, 'startViewTransition', {
+        value: mockStartViewTransition,
+        writable: true
+      });
+
+      const mockLocation = { 
+        href: '', 
+        pathname: '/de/'
+      };
+      Object.defineProperty(window, 'location', {
+        value: mockLocation,
+        writable: true
+      });
+
+      const englishOption = element.shadowRoot!.querySelector('.language-option[aria-selected="false"]') as HTMLElement;
+      
+      englishOption.click();
+      await element.updateComplete;
+      
+      expect(mockStartViewTransition).toHaveBeenCalled();
+    });
+  });
+
+  describe('Browser Language Detection', () => {
+    it('should correctly parse language codes from navigator.languages', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+      
+      Object.defineProperty(navigator, 'languages', {
+        value: ['en-GB', 'en-US', 'fr'],
+        writable: true
+      });
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector current-language=""></astro-language-selector>
+      `);
+      
+      expect(newElement.currentLanguage).toBe('en');
+    });
+
+    it('should handle navigator.language when languages array is not available', async () => {
+      mockLocalStorage.getItem.mockReturnValue(null);
+      
+      Object.defineProperty(navigator, 'languages', {
+        value: undefined,
+        writable: true
+      });
+      
+      Object.defineProperty(navigator, 'language', {
+        value: 'de-AT',
+        writable: true
+      });
+      
+      const newElement = await fixture<AstroLanguageSelector>(html`
+        <astro-language-selector></astro-language-selector>
+      `);
+      
+      expect(newElement.currentLanguage).toBe('de');
     });
   });
 });

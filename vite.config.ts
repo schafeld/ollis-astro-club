@@ -6,9 +6,16 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        club: resolve(__dirname, 'club.html'),
-        contact: resolve(__dirname, 'contact.html'),
-        meetings: resolve(__dirname, 'meetings.html'),
+        // German pages
+        'de-index': resolve(__dirname, 'de/index.html'),
+        'de-club': resolve(__dirname, 'de/club.html'),
+        'de-contact': resolve(__dirname, 'de/contact.html'),
+        'de-meetings': resolve(__dirname, 'de/meetings.html'),
+        // English pages
+        'en-index': resolve(__dirname, 'en/index.html'),
+        'en-club': resolve(__dirname, 'en/club.html'),
+        'en-contact': resolve(__dirname, 'en/contact.html'),
+        'en-meetings': resolve(__dirname, 'en/meetings.html'),
       },
     },
   },

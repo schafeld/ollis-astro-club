@@ -194,14 +194,54 @@ export class AstroLanguageSelector extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Set current language to default if not specified
-    if (!this.currentLanguage) {
-      this.currentLanguage = this.defaultLanguage;
-    }
+    
+    // Initialize language from localStorage, browser, or default
+    this.currentLanguage = this._getInitialLanguage();
     
     // Listen for clicks outside to close dropdown
     document.addEventListener('click', this._handleDocumentClick);
     document.addEventListener('keydown', this._handleDocumentKeydown);
+  }
+
+  private _getInitialLanguage(): string {
+    const LANGUAGE_KEY = 'preferred-language';
+    const SUPPORTED_LANGUAGES = ['de', 'en'];
+    
+    // 1. Check if current language is already set and valid
+    if (this.currentLanguage && SUPPORTED_LANGUAGES.includes(this.currentLanguage)) {
+      return this.currentLanguage;
+    }
+    
+    // 2. Check localStorage
+    try {
+      const stored = localStorage.getItem(LANGUAGE_KEY);
+      if (stored && SUPPORTED_LANGUAGES.includes(stored)) {
+        return stored;
+      }
+    } catch (e) {
+      console.warn('LocalStorage not available:', e);
+    }
+    
+    // 3. Detect from browser language
+    const languages = navigator.languages || [navigator.language];
+    for (const lang of languages) {
+      const normalizedLang = lang.toLowerCase().split('-')[0];
+      if (SUPPORTED_LANGUAGES.includes(normalizedLang)) {
+        return normalizedLang;
+      }
+    }
+    
+    // 4. Fall back to default
+    return this.defaultLanguage;
+  }
+
+  private _saveLanguagePreference(language: string) {
+    const LANGUAGE_KEY = 'preferred-language';
+    try {
+      localStorage.setItem(LANGUAGE_KEY, language);
+    } catch (e) {
+      console.warn('Could not save language preference:', e);
+    }
   }
 
   disconnectedCallback() {
@@ -255,6 +295,9 @@ export class AstroLanguageSelector extends LitElement {
       const oldLanguage = this.currentLanguage;
       this.currentLanguage = languageCode;
       
+      // Save language preference to localStorage
+      this._saveLanguagePreference(languageCode);
+      
       // Dispatch custom event for language change
       this.dispatchEvent(new CustomEvent('language-change', {
         detail: {
@@ -265,9 +308,51 @@ export class AstroLanguageSelector extends LitElement {
         bubbles: true,
         composed: true
       }));
+      
+      // Navigate to the new language URL
+      this._navigateToLanguage(languageCode);
     }
     
     this._closeDropdown();
+  }
+
+  private _navigateToLanguage(languageCode: string) {
+    const currentPath = window.location.pathname;
+    const currentLangCode = this._getCurrentLanguageFromPath();
+    
+    let newPath: string;
+    
+    if (currentLangCode) {
+      // Replace existing language in path
+      newPath = currentPath.replace(`/${currentLangCode}/`, `/${languageCode}/`);
+    } else {
+      // Add language to root path
+      if (currentPath === '/' || currentPath === '') {
+        newPath = `/${languageCode}/`;
+      } else {
+        // If we're on a specific page without language prefix, 
+        // prepend the language code
+        newPath = `/${languageCode}${currentPath}`;
+      }
+    }
+    
+    // Ensure localStorage is saved before navigation
+    this._saveLanguagePreference(languageCode);
+    
+    // Navigate directly to the new path
+    window.location.href = newPath;
+  }
+
+  private _getCurrentLanguageFromPath(): string | null {
+    const pathname = window.location?.pathname || '/';
+    const pathSegments = pathname.split('/').filter(Boolean);
+    const firstSegment = pathSegments[0];
+    
+    if (this._languages.some(lang => lang.code === firstSegment)) {
+      return firstSegment;
+    }
+    
+    return null;
   }
 
   private _handleKeyDown(event: KeyboardEvent) {

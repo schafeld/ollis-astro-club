@@ -1,210 +1,326 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Olli's Astro Club - Gemeinsam die Wunder des Universums entdecken. Astronomie-Club für Sternfreunde jeden Alters.">
-    <meta name="keywords" content="Astronomie, Teleskop, Sterne, Planeten, Club, Beobachtung, Astrofotografie">
+    <meta name="description" content="Olli's Astro Club - Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
+    <meta name="keywords" content="astronomy, telescope, stars, planets, club, observation, astrophotography">
     <meta name="author" content="Olli's Astro Club">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Olli's Astro Club - Astronomie für alle">
-    <meta property="og:description" content="Gemeinsam die Wunder des Universums entdecken. Astronomie-Club für Sternfreunde jeden Alters.">
+    <meta property="og:title" content="Olli's Astro Club - Astronomy for everyone">
+    <meta property="og:description" content="Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ollis-astro-club.com">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Olli's Astro Club - Astronomie für alle">
-    <meta name="twitter:description" content="Gemeinsam die Wunder des Universums entdecken. Astronomie-Club für Sternfreunde jeden Alters.">
+    <meta name="twitter:title" content="Olli's Astro Club - Astronomy for everyone">
+    <meta name="twitter:description" content="Exploring the wonders of the universe together. Astronomy club for stargazers of all ages.">
     
-    <title>Olli's Astro Club - Astronomie für alle</title>
+    <title>Olli's Astro Club - Language Selection</title>
     <link rel="icon" href="/assets/logo-astro-club-300x300.png" type="image/png">
     <style>
-        /* Prevent flash of unstyled content */
-        body { 
-            opacity: 0; 
-            transition: opacity 0.3s ease-in-out; 
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
-        body.loaded { 
-            opacity: 1; 
+        
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem 0;
+            font-weight: 700;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin: 0 0 2rem 0;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .language-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .language-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            min-width: 140px;
+        }
+        
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .flag {
+            font-size: 1.5rem;
+        }
+        
+        .loading {
+            display: none;
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .language-btn {
+                padding: 0.75rem 1.5rem;
+                min-width: 120px;
+            }
         }
     </style>
-    <script type="module" src="/src/index.ts"></script>
+    <script>
+        // Language detection and redirect logic
+        (function() {
+            const LANGUAGE_KEY = 'preferred-language';
+            const SUPPORTED_LANGUAGES = ['de', 'en'];
+            const DEFAULT_LANGUAGE = 'de';
+            
+            /**
+             * Detect browser language preference
+             * @returns {string} Language code (de, en) or default
+             */
+            function detectBrowserLanguage() {
+                // Get all available language information
+                const languages = navigator.languages || [navigator.language || navigator.userLanguage];
+                
+                console.log('Available languages:', languages);
+                
+                // Check each language preference
+                for (const lang of languages) {
+                    if (!lang) continue;
+                    
+                    const normalizedLang = lang.toLowerCase().split('-')[0];
+                    console.log('Checking language:', lang, '-> normalized:', normalizedLang);
+                    
+                    if (SUPPORTED_LANGUAGES.includes(normalizedLang)) {
+                        console.log('Found supported language:', normalizedLang);
+                        return normalizedLang;
+                    }
+                }
+                
+                console.log('No supported language found, using default:', DEFAULT_LANGUAGE);
+                return DEFAULT_LANGUAGE;
+            }
+            
+            /**
+             * Get preferred language from localStorage or browser
+             * @returns {string} Language code
+             */
+            function getPreferredLanguage() {
+                try {
+                    const stored = localStorage.getItem(LANGUAGE_KEY);
+                    if (stored && SUPPORTED_LANGUAGES.includes(stored)) {
+                        return stored;
+                    }
+                } catch (e) {
+                    console.warn('LocalStorage not available:', e);
+                }
+                
+                return detectBrowserLanguage();
+            }
+            
+            /**
+             * Save language preference to localStorage
+             * @param {string} language Language code
+             */
+            function saveLanguagePreference(language) {
+                try {
+                    localStorage.setItem(LANGUAGE_KEY, language);
+                    console.log('Language preference saved:', language);
+                } catch (e) {
+                    console.warn('Could not save language preference:', e);
+                }
+            }
+            
+            /**
+             * Redirect to language-specific page
+             * @param {string} language Language code
+             * @param {string} page Optional page path
+             */
+            function redirectToLanguage(language, page = '') {
+                saveLanguagePreference(language);
+                const basePath = language === DEFAULT_LANGUAGE ? `/${language}/` : `/${language}/`;
+                console.log('Redirecting to:', basePath + page);
+                window.location.href = basePath + page;
+            }
+            
+            /**
+             * Handle manual language selection
+             * @param {string} language Language code
+             */
+            function selectLanguage(language) {
+                console.log('Manual language selection:', language);
+                const loadingEl = document.querySelector('.loading');
+                if (loadingEl) {
+                    loadingEl.style.display = 'block';
+                }
+                
+                setTimeout(() => {
+                    redirectToLanguage(language);
+                }, 200);
+            }
+            
+            // Auto-redirect logic - enhanced for better language detection
+            function shouldAutoRedirect() {
+                // Check if user came from internal navigation
+                const referrer = document.referrer;
+                const currentHost = window.location.host;
+                
+                console.log('Referrer check:', { referrer, currentHost });
+                
+                // Don't auto-redirect if:
+                // - URL has explicit no-redirect parameter
+                if (window.location.search.includes('no-redirect')) {
+                    console.log('No-redirect parameter detected');
+                    return false;
+                }
+                
+                // Don't auto-redirect if user came from internal navigation (same domain)
+                if (referrer && referrer.includes(currentHost)) {
+                    console.log('Internal navigation detected, showing language selection');
+                    return false;
+                }
+                
+                // Auto-redirect for external visitors or direct access
+                console.log('Auto-redirect enabled for external/direct access');
+                return true;
+            }
+            
+            // DOM ready handler
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Language detection initialized');
+                // Set up manual language selection
+                window.selectLanguage = selectLanguage;
+                
+                // Check if we should auto-redirect
+                if (!shouldAutoRedirect()) {
+                    console.log('Auto-redirect disabled (internal navigation detected)');
+                    // Mark that language selection has been shown
+                    sessionStorage.setItem('language-selection-shown', 'true');
+                    return;
+                }
+                
+                console.log('Auto-redirect enabled');
+                const preferredLang = getPreferredLanguage();
+                
+                // Check if we have a stored preference
+                try {
+                    const stored = localStorage.getItem(LANGUAGE_KEY);
+                    console.log('Stored language preference:', stored);
+                    if (stored && SUPPORTED_LANGUAGES.includes(stored)) {
+                        // User has made a choice before - redirect immediately
+                        console.log('Using stored preference:', stored);
+                        redirectToLanguage(stored);
+                        return;
+                    }
+                } catch (e) {
+                    console.warn('LocalStorage not available:', e);
+                }
+                
+                // Check if browser language is detectable
+                const detectedLang = detectBrowserLanguage();
+                console.log('Detected browser language:', detectedLang);
+                if (detectedLang !== DEFAULT_LANGUAGE || navigator.language) {
+                    // We have a detectable preference (either non-default or explicit language)
+                    // Small delay to prevent jarring redirect but still auto-redirect
+                    setTimeout(() => {
+                        redirectToLanguage(detectedLang);
+                    }, 300);
+                    return;
+                }
+                
+                // If we reach here, show the language selection
+                // Mark that language selection has been shown
+                sessionStorage.setItem('language-selection-shown', 'true');
+            });
+        })();
+    </script>
 </head>
 <body>
-    <astro-layout page-title="Willkommen" current-path="/">
-        <!-- Hero Section -->
-        <section class="hero" style="text-align: center; padding: 3rem 0; background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); color: white; margin: 0 0 2rem 0; border-radius: 0 0 1rem 1rem;">
-            <div style="max-width: 800px; margin: 0 auto; padding: 0 1rem;">
-                <h2 style="font-size: 2.5rem; font-weight: bold; margin: 0 0 1rem 0; line-height: 1.2;">
-                    Gemeinsam die Wunder des Universums entdecken (index.html)
-                </h2>
-                <p style="font-size: 1.2rem; margin: 0 0 2rem 0; opacity: 0.9; line-height: 1.6;">
-                    Willkommen bei Olli's Astro Club! Hier treffen sich Astronomie-Begeisterte jeden Alters, 
-                    um gemeinsam den Himmel zu erforschen, zu lernen und zu staunen.
-                </p>
-                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <astro-button variant="primary" size="large" href="/club">
-                        Mehr über uns
-                    </astro-button>
-                    <astro-button variant="secondary" size="large" href="/meetings">
-                        Nächste Termine
-                    </astro-button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Club Features Section -->
-        <section style="margin: 3rem 0;">
-            <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin: 0 0 2rem 0; color: var(--astro-text-color);">
-                Über unseren Club
-            </h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                <astro-card 
-                    title="🔭 Beobachtungsabende" 
-                    variant="elevated"
-                >
-                    <p>
-                        Regelmäßige Treffen unter dem Sternenhimmel mit professionellen Teleskopen 
-                        und erfahrenen Hobbyastronomen. Entdecke Planeten, Sterne und ferne Galaxien!
-                    </p>
-                </astro-card>
-                
-                <astro-card 
-                    title="📚 Workshops & Vorträge" 
-                    variant="elevated"
-                >
-                    <p>
-                        Lerne alles über Astronomie - von den Grundlagen bis hin zu fortgeschrittenen 
-                        Techniken der Astrofotografie. Für Einsteiger und Fortgeschrittene.
-                    </p>
-                </astro-card>
-                
-                <astro-card 
-                    title="🌟 Gemeinschaft" 
-                    variant="elevated"
-                >
-                    <p>
-                        Eine freundliche Community von Sternenfreunden, die ihre Leidenschaft 
-                        und ihr Wissen gerne teilen. Hier findest du Gleichgesinnte!
-                    </p>
-                </astro-card>
-            </div>
-        </section>
-
-        <!-- Upcoming Events Section -->
-        <section style="margin: 4rem 0; padding: 2rem; background-color: var(--astro-background-alt); border-radius: 1rem;">
-            <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin: 0 0 2rem 0; color: var(--astro-text-color);">
-                Nächste Termine
-            </h2>
-            <div style="display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto;">
-                <astro-card 
-                    title="Beobachtungsabend: Wintersternbilder"
-                    subtitle="15. Dezember 2024 • 19:00 - 22:00 Uhr"
-                    variant="outlined"
-                >
-                    <p>
-                        Entdecke die prächtigen Sternbilder des Winterhimmels! Wir beobachten Orion, 
-                        die Plejaden und andere Highlights der kalten Jahreszeit. 
-                        <strong>Treffpunkt:</strong> Vereinsgelände
-                    </p>
-                    <div slot="actions">
-                        <astro-button variant="primary" size="small">
-                            Anmelden
-                        </astro-button>
-                    </div>
-                </astro-card>
-                
-                <astro-card 
-                    title="Workshop: Einsteiger-Teleskope"
-                    subtitle="22. Dezember 2024 • 18:00 - 20:00 Uhr"
-                    variant="outlined"
-                >
-                    <p>
-                        Alles was du über den Kauf und die Nutzung deines ersten Teleskops wissen musst. 
-                        Von der Auswahl bis zur ersten Beobachtung - wir begleiten dich!
-                    </p>
-                    <div slot="actions">
-                        <astro-button variant="primary" size="small">
-                            Anmelden
-                        </astro-button>
-                    </div>
-                </astro-card>
-            </div>
-        </section>
-
-        <!-- Current Observations Section -->
-        <section style="margin: 3rem 0;">
-            <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin: 0 0 2rem 0; color: var(--astro-text-color);">
-                Aktuelle Beobachtungstipps
-            </h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                <astro-card 
-                    title="🌙 Mondphasen im Dezember" 
-                    variant="default"
-                >
-                    <p>
-                        Der Dezember bietet hervorragende Gelegenheiten zur Mondbeobachtung. 
-                        Besonders die Zeit um Neumond ist ideal für Deep-Sky-Objekte.
-                    </p>
-                    <div slot="actions">
-                        <astro-button variant="secondary" size="small">
-                            Mondkalender
-                        </astro-button>
-                    </div>
-                </astro-card>
-                
-                <astro-card 
-                    title="⭐ Jupiter & Saturn" 
-                    variant="default"
-                >
-                    <p>
-                        Die beiden Gasriesen sind momentan gut am Abendhimmel zu beobachten. 
-                        Ein perfektes Ziel für Teleskop-Anfänger!
-                    </p>
-                    <div slot="actions">
-                        <astro-button variant="secondary" size="small">
-                            Planetenguide
-                        </astro-button>
-                    </div>
-                </astro-card>
-                
-                <astro-card 
-                    title="🌌 Andromeda-Galaxie" 
-                    variant="default"
-                >
-                    <p>
-                        M31, unsere Nachbargalaxie, steht hoch am Himmel und ist bereits 
-                        mit kleinen Teleskopen gut sichtbar.
-                    </p>
-                    <div slot="actions">
-                        <astro-button variant="secondary" size="small">
-                            Deep-Sky Guide
-                        </astro-button>
-                    </div>
-                </astro-card>
-            </div>
-        </section>
-
-        <!-- Call to Action Section -->
-        <section style="text-align: center; margin: 4rem 0; padding: 2rem; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border-radius: 1rem;">
-            <h2 style="font-size: 2rem; font-weight: bold; margin: 0 0 1rem 0;">
-                Bereit für dein Abenteuer unter den Sternen?
-            </h2>
-            <p style="font-size: 1.2rem; margin: 0 0 2rem 0; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Tritt unserem Club bei und entdecke die faszinierende Welt der Astronomie. 
-                Für Anfänger und Experten gleichermaßen geeignet!
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <astro-button variant="primary" size="large" href="/contact">
-                    Kontakt aufnehmen
-                </astro-button>
-                <astro-button variant="secondary" size="large" href="/club">
-                    Mehr erfahren
-                </astro-button>
-            </div>
-        </section>
-    </astro-layout>
+    <div class="container">
+        <img src="/assets/logo-astro-club-300x300.png" alt="Olli's Astro Club Logo" class="logo">
+        
+        <h1>Olli's Astro Club</h1>
+        <p>Choose your language / Wähle deine Sprache</p>
+        
+        <div class="language-buttons">
+            <a href="#" onclick="selectLanguage('de'); return false;" class="language-btn">
+                <span class="flag">🇩🇪</span>
+                <span>Deutsch</span>
+            </a>
+            
+            <a href="#" onclick="selectLanguage('en'); return false;" class="language-btn">
+                <span class="flag">🇺🇸</span>
+                <span>English</span>
+            </a>
+        </div>
+        
+        <div class="loading">
+            <div class="spinner"></div>
+            Redirecting...
+        </div>
+    </div>
 </body>
 </html>

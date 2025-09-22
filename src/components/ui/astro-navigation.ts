@@ -231,7 +231,7 @@ export class AstroNavigation extends LitElement {
   render() {
     const menuClasses = this.open ? 'nav__menu nav__menu--open' : 'nav__menu';
     const isGerman = this.currentLanguage === 'de';
-    const baseUrl = isGerman ? '' : '/en'; // German uses root, English uses /en
+    const baseUrl = isGerman ? '/de' : '/en'; // Both languages use their respective folders
 
     return html`
       <nav class="nav" role="navigation" aria-label="Main navigation">

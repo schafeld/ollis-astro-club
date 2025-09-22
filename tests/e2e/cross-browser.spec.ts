@@ -24,7 +24,7 @@ test.describe('Cross-Browser Compatibility', () => {
     ['chromium', 'firefox', 'webkit'].forEach(browserName => {
       test.describe(`${browserName}`, () => {
         test(`should render navigation correctly on ${browserName}`, async ({ page }) => {
-          await page.goto('/');
+          await page.goto('/de/', { waitUntil: 'networkidle' });
           
           // Basic navigation should be visible and functional
           const nav = page.locator('astro-navigation');
@@ -38,12 +38,12 @@ test.describe('Cross-Browser Compatibility', () => {
           await expect(logo).toBeVisible();
           
           // Navigation should work
-          await clickNavLink(page, '/club.html');
-          await expect(page).toHaveURL('/club.html');
+          await clickNavLink(page, '/de/club.html');
+          await expect(page).toHaveURL('/de/club.html');
         });
 
         test(`should handle theme toggle correctly on ${browserName}`, async ({ page }) => {
-          await page.goto('/');
+          await page.goto('/de/', { waitUntil: 'networkidle' });
           
           // Get initial theme state
           const html = page.locator('html');
@@ -60,7 +60,7 @@ test.describe('Cross-Browser Compatibility', () => {
         });
 
         test(`should handle language switching on ${browserName}`, async ({ page }) => {
-          await page.goto('/');
+          await page.goto('/de/', { waitUntil: 'networkidle' });
           
           // Switch to English
           await page.click('astro-language-selector .selector-button');
@@ -71,7 +71,7 @@ test.describe('Cross-Browser Compatibility', () => {
         });
 
         test(`should support keyboard navigation on ${browserName}`, async ({ page }) => {
-          await page.goto('/');
+          await page.goto('/de/', { waitUntil: 'networkidle' });
           
           // Focus the first navigation link directly
           const firstLink = page.locator('.nav__link').first();
@@ -93,7 +93,7 @@ test.describe('Cross-Browser Compatibility', () => {
     // iPhone 12 tests
     test('should render mobile navigation correctly on iPhone 12', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       const toggleButton = page.locator('.nav__toggle');
       
@@ -106,13 +106,13 @@ test.describe('Cross-Browser Compatibility', () => {
       await expect(page.locator('.nav__menu')).toBeVisible();
       
       // Navigation should work from mobile menu
-      await clickNavLink(page, '/club.html');
+      await clickNavLink(page, '/de/club.html');
       await expect(page).toHaveURL(/\/club\.html$/);
     });
 
     test('should handle touch interactions correctly on iPhone 12', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Theme toggle should work with touch (using click since tap needs hasTouch context)
       await page.click('astro-theme-toggle button');
@@ -129,7 +129,7 @@ test.describe('Cross-Browser Compatibility', () => {
 
     test('should maintain responsive layout on iPhone 12', async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Check mobile layout elements
       await expect(page.locator('.nav__toggle')).toBeVisible();
@@ -145,7 +145,7 @@ test.describe('Cross-Browser Compatibility', () => {
     // Pixel 5 tests  
     test('should render mobile navigation correctly on Pixel 5', async ({ page }) => {
       await page.setViewportSize({ width: 393, height: 851 });
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       const toggleButton = page.locator('.nav__toggle');
       
@@ -161,7 +161,7 @@ test.describe('Cross-Browser Compatibility', () => {
     // iPad tests
     test('should render tablet navigation correctly on iPad', async ({ page }) => {
       await page.setViewportSize({ width: 820, height: 1180 });
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       const toggleButton = page.locator('.nav__toggle');
       
@@ -184,7 +184,7 @@ test.describe('Cross-Browser Compatibility', () => {
     viewportSizes.forEach(({ width, height, name }) => {
       test(`should work correctly at ${name} (${width}x${height})`, async ({ page }) => {
         await page.setViewportSize({ width, height });
-        await page.goto('/');
+        await page.goto('/de/', { waitUntil: 'networkidle' });
         
         // Navigation should be visible and functional
         const nav = page.locator('astro-navigation');
@@ -204,7 +204,7 @@ test.describe('Cross-Browser Compatibility', () => {
         }
         
         // Navigation should work regardless of viewport
-        await clickNavLink(page, "/club.html");
+        await clickNavLink(page, "/de/club.html");
         await expect(page).toHaveURL(/\/club\.html$/);
       });
     });
@@ -217,10 +217,10 @@ test.describe('Cross-Browser Compatibility', () => {
         delete (document as any).startViewTransition;
       });
       
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Navigation should still work
-      await clickNavLink(page, "/club.html");
+      await clickNavLink(page, "/de/club.html");
       await expect(page).toHaveURL(/\/club\.html$/);
     });
 
@@ -234,13 +234,13 @@ test.describe('Cross-Browser Compatibility', () => {
         };
       });
       
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Navigation should still be visible and functional
       const nav = page.locator('astro-navigation');
       await expect(nav).toBeVisible();
       
-      await clickNavLink(page, "/club.html");
+      await clickNavLink(page, "/de/club.html");
       await expect(page).toHaveURL(/\/club\.html$/);
     });
 
@@ -253,7 +253,7 @@ test.describe('Cross-Browser Compatibility', () => {
         });
       });
       
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Theme toggle should still work (but not persist)
       await page.click('astro-theme-toggle button');
@@ -272,7 +272,7 @@ test.describe('Cross-Browser Compatibility', () => {
     test('should load quickly on all browsers', async ({ page }) => {
       const startTime = Date.now();
       
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       await page.waitForLoadState('networkidle');
       
       const loadTime = Date.now() - startTime;
@@ -285,7 +285,7 @@ test.describe('Cross-Browser Compatibility', () => {
     });
 
     test('should handle rapid interactions smoothly', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Rapid theme toggles
       for (let i = 0; i < 5; i++) {
@@ -298,14 +298,14 @@ test.describe('Cross-Browser Compatibility', () => {
       expect(['light', 'dark']).toContain(theme);
       
       // Navigation should still work
-      await clickNavLink(page, "/club.html");
+      await clickNavLink(page, "/de/club.html");
       await expect(page).toHaveURL(/\/club\.html$/);
     });
   });
 
   test.describe('Accessibility Across Browsers', () => {
     test('should maintain focus visibility on all browsers', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Tab through interactive elements
       const interactiveElements = [
@@ -326,7 +326,7 @@ test.describe('Cross-Browser Compatibility', () => {
     });
 
     test('should support screen reader navigation patterns', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('/de/', { waitUntil: 'networkidle' });
       
       // Check for proper heading structure (first main heading is h2)
       const h2 = page.locator('h2').first();
