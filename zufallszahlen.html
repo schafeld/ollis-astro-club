@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallszahlen – Ollis Astro Club</title>
+  <style>
+    /* ========== CONFIGURATION ========== */
+    :root {
+      --spin-duration: 5s;
+
+      /* Astro Club palette – deep space blues, purples, gold accents */
+      --bg-dark: #0b0e1a;
+      --bg-radial: #141833;
+      --accent-blue: #3a7bd5;
+      --accent-purple: #6c3ec1;
+      --accent-gold: #f0c040;
+      --accent-cyan: #00d4ff;
+      --text-light: #e8eaf6;
+      --glow-color: rgba(0, 212, 255, 0.35);
+    }
+
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 50% 40%, var(--bg-radial) 0%, var(--bg-dark) 70%);
+      position: relative;
+    }
+
+    /* ========== STARS BACKGROUND ========== */
+    .stars {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .stars canvas { width: 100%; height: 100%; }
+
+    /* ========== LOGO ========== */
+    .logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.5));
+      transition: filter 0.4s;
+    }
+    .logo img {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+    }
+
+    /* ========== WHEEL CONTAINER ========== */
+    .wheel-wrapper {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .wheel-stage {
+      position: relative;
+      width: 420px; height: 420px;
+    }
+
+    /* Outer glow ring */
+    .wheel-stage::before {
+      content: '';
+      position: absolute;
+      inset: -18px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--accent-cyan), var(--accent-purple), var(--accent-gold),
+        var(--accent-blue), var(--accent-cyan)
+      );
+      opacity: 0.35;
+      filter: blur(18px);
+      animation: ringPulse 3s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.25; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.04); }
+    }
+
+    /* The SVG wheel */
+    .wheel-svg {
+      width: 100%; height: 100%;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 24px rgba(0,0,0,0.6));
+      transition: filter 0.3s;
+    }
+
+    .wheel-svg.spinning {
+      filter: drop-shadow(0 0 40px var(--glow-color));
+    }
+
+    .wheel-group {
+      transform-origin: 50% 50%;
+    }
+
+    /* Pointer / indicator */
+    .pointer {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 0; height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 36px solid var(--accent-gold);
+      filter: drop-shadow(0 4px 12px rgba(240, 192, 64, 0.7));
+      transition: transform 0.15s;
+    }
+    .pointer.bounce {
+      animation: pointerBounce 0.25s ease-in-out 3;
+    }
+    @keyframes pointerBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* Center hub */
+    .hub {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      transform: translate(-50%, -50%);
+      z-index: 8;
+      background: radial-gradient(circle, #1e2244 30%, #0b0e1a 100%);
+      border-radius: 50%;
+      border: 3px solid var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(240, 192, 64, 0.4);
+    }
+    .hub img {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+    }
+
+    /* ========== RESULT DISPLAY ========== */
+    .result-display {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 0 30px var(--accent-cyan), 0 0 60px var(--accent-purple);
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .result-display.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .result-display.pop {
+      animation: popIn 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      60% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ========== SPIN BUTTON ========== */
+    .spin-btn {
+      position: relative;
+      padding: 16px 52px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #fff;
+      border: none;
+      border-radius: 60px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      box-shadow:
+        0 4px 24px rgba(58, 123, 213, 0.4),
+        0 0 60px rgba(108, 62, 193, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 10;
+      overflow: hidden;
+    }
+    .spin-btn::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 62px;
+      background: conic-gradient(var(--accent-cyan), var(--accent-purple), var(--accent-gold), var(--accent-cyan));
+      z-index: -1;
+      animation: borderSpin 3s linear infinite;
+    }
+    .spin-btn::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 58px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      z-index: -1;
+    }
+    @keyframes borderSpin {
+      to { transform: rotate(360deg); }
+    }
+    .spin-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow:
+        0 6px 32px rgba(58, 123, 213, 0.6),
+        0 0 80px rgba(108, 62, 193, 0.35);
+    }
+    .spin-btn:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+    .spin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ========== PARTICLE BURST ========== */
+    .particle-canvas {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 500px) {
+      .wheel-stage { width: 300px; height: 300px; }
+      .hub { width: 60px; height: 60px; }
+      .hub img { width: 42px; height: 42px; }
+      .result-display { font-size: 2.8rem; }
+      .spin-btn { padding: 12px 36px; font-size: 1.1rem; }
+      .logo img { width: 64px; height: 64px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Stars background -->
+  <div class="stars"><canvas id="starsCanvas"></canvas></div>
+
+  <!-- Particle burst canvas -->
+  <canvas class="particle-canvas" id="particleCanvas"></canvas>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="assets/logo-astro-club-300x300.png" alt="Ollis Astro Club" />
+  </div>
+
+  <!-- Wheel -->
+  <div class="wheel-wrapper">
+    <div class="wheel-stage">
+      <div class="pointer" id="pointer"></div>
+      <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 400 400">
+        <g class="wheel-group" id="wheelGroup"></g>
+      </svg>
+      <div class="hub">
+        <img src="assets/logo-astro-club-300x300.png" alt="" />
+      </div>
+    </div>
+
+    <div class="result-display" id="resultDisplay">?</div>
+
+    <button class="spin-btn" id="spinBtn">Drehen!</button>
+  </div>
+
+  <script>
+    /* ================================================================
+       CONFIGURATION – change these values to adjust behaviour
+       ================================================================ */
+    const CONFIG = {
+      minNumber: 1,       // lower bound (inclusive)
+      maxNumber: 8,       // upper bound (inclusive)
+      spinDuration: 5000, // milliseconds for the spin animation
+    };
+
+    /* ================================================================
+       DERIVED VALUES
+       ================================================================ */
+    const COUNT = CONFIG.maxNumber - CONFIG.minNumber + 1;
+    const SEGMENT_ANGLE = 360 / COUNT;
+
+    /* ================================================================
+       COLOUR PALETTE (matching Astro Club branding)
+       ================================================================ */
+    const SEGMENT_COLORS = [
+      '#3a7bd5', '#6c3ec1', '#f0c040', '#00d4ff',
+      '#8e44ad', '#2980b9', '#e67e22', '#1abc9c',
+      '#d35400', '#c0392b', '#16a085', '#2c3e50',
+    ];
+
+    /* ================================================================
+       BUILD WHEEL SEGMENTS
+       ================================================================ */
+    const wheelGroup = document.getElementById('wheelGroup');
+    const CX = 200, CY = 200, R = 195;
+
+    function polarToCart(cx, cy, r, deg) {
+      const rad = (deg - 90) * Math.PI / 180;
+      return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+    }
+
+    for (let i = 0; i < COUNT; i++) {
+      const startAngle = i * SEGMENT_ANGLE;
+      const endAngle = startAngle + SEGMENT_ANGLE;
+      const s = polarToCart(CX, CY, R, startAngle);
+      const e = polarToCart(CX, CY, R, endAngle);
+      const large = SEGMENT_ANGLE > 180 ? 1 : 0;
+
+      // Segment path
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M${CX},${CY} L${s.x},${s.y} A${R},${R} 0 ${large} 1 ${e.x},${e.y} Z`);
+      path.setAttribute('fill', SEGMENT_COLORS[i % SEGMENT_COLORS.length]);
+      path.setAttribute('stroke', '#0b0e1a');
+      path.setAttribute('stroke-width', '2');
+      wheelGroup.appendChild(path);
+
+      // Label
+      const midAngle = startAngle + SEGMENT_ANGLE / 2;
+      const labelR = R * 0.68;
+      const lp = polarToCart(CX, CY, labelR, midAngle);
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', lp.x);
+      text.setAttribute('y', lp.y);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'central');
+      text.setAttribute('fill', '#fff');
+      text.setAttribute('font-size', `${Math.min(36, 200 / COUNT)}px`);
+      text.setAttribute('font-weight', '900');
+      text.setAttribute('style', 'text-shadow: 0 2px 6px rgba(0,0,0,0.6);');
+      text.textContent = CONFIG.minNumber + i;
+      wheelGroup.appendChild(text);
+    }
+
+    // Outer ring gradient
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.setAttribute('id', 'ringGrad');
+    [
+      { offset: '0%', color: '#f0c040' },
+      { offset: '50%', color: '#00d4ff' },
+      { offset: '100%', color: '#f0c040' },
+    ].forEach(s => {
+      const stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+      stop.setAttribute('offset', s.offset);
+      stop.setAttribute('stop-color', s.color);
+      grad.appendChild(stop);
+    });
+    defs.appendChild(grad);
+    document.getElementById('wheelSvg').prepend(defs);
+
+    const outerRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    outerRing.setAttribute('cx', CX);
+    outerRing.setAttribute('cy', CY);
+    outerRing.setAttribute('r', R);
+    outerRing.setAttribute('fill', 'none');
+    outerRing.setAttribute('stroke', 'url(#ringGrad)');
+    outerRing.setAttribute('stroke-width', '5');
+    wheelGroup.appendChild(outerRing);
+
+    /* ================================================================
+       STAR FIELD BACKGROUND
+       ================================================================ */
+    (function initStars() {
+      const canvas = document.getElementById('starsCanvas');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        stars = Array.from({ length: 200 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.8 + 0.3,
+          a: Math.random(),
+          da: (Math.random() - 0.5) * 0.015,
+        }));
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+          s.a += s.da;
+          if (s.a > 1 || s.a < 0.15) s.da *= -1;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200,220,255,${s.a})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ================================================================
+       PARTICLE BURST ON WIN
+       ================================================================ */
+    const particleCanvas = document.getElementById('particleCanvas');
+    const pCtx = particleCanvas.getContext('2d');
+    let particles = [];
+    let particleAnimId = null;
+
+    function resizeParticles() {
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    }
+    resizeParticles();
+    window.addEventListener('resize', resizeParticles);
+
+    function emitParticles(cx, cy) {
+      const colors = ['#f0c040', '#00d4ff', '#6c3ec1', '#3a7bd5', '#fff', '#e67e22'];
+      for (let i = 0; i < 80; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 6 + 2;
+        particles.push({
+          x: cx, y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          r: Math.random() * 4 + 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          life: 1,
+          decay: Math.random() * 0.015 + 0.008,
+        });
+      }
+      if (!particleAnimId) animateParticles();
+    }
+
+    function animateParticles() {
+      pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08;
+        p.life -= p.decay;
+        if (p.life > 0) {
+          pCtx.globalAlpha = p.life;
+          pCtx.beginPath();
+          pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          pCtx.fillStyle = p.color;
+          pCtx.fill();
+        }
+      });
+      pCtx.globalAlpha = 1;
+      particles = particles.filter(p => p.life > 0);
+      if (particles.length > 0) {
+        particleAnimId = requestAnimationFrame(animateParticles);
+      } else {
+        particleAnimId = null;
+        pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      }
+    }
+
+    /* ================================================================
+       TICK SOUND (synthetic via Web Audio)
+       ================================================================ */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTick(freq = 1200, dur = 0.04) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(); osc.stop(audioCtx.currentTime + dur);
+    }
+    function playWin() {
+      [0, 100, 200, 350, 500].forEach((d, i) =>
+        setTimeout(() => playTick(800 + i * 200, 0.12), d)
+      );
+    }
+
+    /* ================================================================
+       SPIN LOGIC
+       ================================================================ */
+    const spinBtn = document.getElementById('spinBtn');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const pointer = document.getElementById('pointer');
+    let currentRotation = 0;
+    let isSpinning = false;
+
+    spinBtn.addEventListener('click', spin);
+
+    function spin() {
+      if (isSpinning) return;
+      isSpinning = true;
+      spinBtn.disabled = true;
+      resultDisplay.classList.remove('visible', 'pop');
+
+      // Pick random winner
+      const winnerIndex = Math.floor(Math.random() * COUNT);
+      const winnerNumber = CONFIG.minNumber + winnerIndex;
+
+      // Calculate target angle:
+      // The pointer is at the top (12 o'clock). Segment 0 starts at 12 o'clock.
+      // We need the CENTER of the winning segment to align with the pointer.
+      const extraSpins = 5 + Math.floor(Math.random() * 3);
+      const targetSegmentAngle = winnerIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+      const jitter = (Math.random() - 0.5) * SEGMENT_ANGLE * 0.6;
+      const finalAngle = currentRotation + 360 * extraSpins + (360 - targetSegmentAngle) - (currentRotation % 360) + jitter;
+
+      // Apply animation
+      const wg = wheelGroup;
+      const svg = document.getElementById('wheelSvg');
+      svg.classList.add('spinning');
+
+      wg.style.transition = `transform ${CONFIG.spinDuration}ms cubic-bezier(0.17, 0.67, 0.12, 0.99)`;
+      wg.style.transform = `rotate(${finalAngle}deg)`;
+      currentRotation = finalAngle;
+
+      // Tick sounds during spin
+      let tickTimeout;
+      const startTime = Date.now();
+      function scheduleTicks() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / CONFIG.spinDuration, 1);
+        const tickRate = 50 + progress * 400;
+        if (progress < 0.95) {
+          playTick(800 + Math.random() * 400, 0.03);
+        }
+        if (progress < 1) {
+          tickTimeout = setTimeout(scheduleTicks, tickRate);
+        }
+      }
+      scheduleTicks();
+
+      // On animation end
+      setTimeout(() => {
+        clearTimeout(tickTimeout);
+        svg.classList.remove('spinning');
+        isSpinning = false;
+        spinBtn.disabled = false;
+
+        // Show result
+        resultDisplay.textContent = winnerNumber;
+        resultDisplay.classList.add('visible', 'pop');
+
+        // Pointer bounce
+        pointer.classList.add('bounce');
+        setTimeout(() => pointer.classList.remove('bounce'), 800);
+
+        // Celebrations
+        playWin();
+        const rect = svg.getBoundingClientRect();
+        emitParticles(rect.left + rect.width / 2, rect.top);
+        setTimeout(() => emitParticles(rect.left + rect.width * 0.3, rect.top + rect.height * 0.3), 200);
+        setTimeout(() => emitParticles(rect.left + rect.width * 0.7, rect.top + rect.height * 0.3), 400);
+      }, CONFIG.spinDuration + 100);
+    }
+  </script>
+</body>
+</html>
+
