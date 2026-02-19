@@ -349,6 +349,7 @@
       text.setAttribute('fill', '#fff');
       text.setAttribute('font-size', `${Math.min(36, 200 / COUNT)}px`);
       text.setAttribute('font-weight', '900');
+      text.setAttribute('transform', `rotate(${midAngle}, ${lp.x}, ${lp.y})`);
       text.setAttribute('style', 'text-shadow: 0 2px 6px rgba(0,0,0,0.6);');
       text.textContent = CONFIG.minNumber + i;
       wheelGroup.appendChild(text);
